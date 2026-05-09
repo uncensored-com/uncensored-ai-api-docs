@@ -1,0 +1,108 @@
+---
+title: "Generate Image"
+description: "Generate images from text prompts."
+---
+
+# Generate Image <Badge color="green" shape="pill">Live</Badge>
+
+```text
+POST /v1/images/generations
+```
+
+Generate an image from a text prompt. The endpoint can return synchronously or queue work for async delivery when a `callback_url` is supplied.
+
+## Request body
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `prompt` | string | Yes | Text prompt describing the image. 1-2,000 characters. |
+| `model` | string | No | Image model to use. Default: `model-dev`. |
+| `image_width` | integer | No | Width in pixels. 256-2,048, must be a multiple of 8. Default: `1024`. |
+| `image_height` | integer | No | Height in pixels. 256-2,048, must be a multiple of 8. Default: `1024`. |
+| `callback_url` | string | No | Webhook URL for async delivery. |
+| `resolution` | string | No | Resolution hint for variable-pricing models, such as `1k`, `2k`, `4k`, or `8k`. |
+| `quality` | string | No | Quality hint for variable-pricing models, such as `medium` or `high`. |
+| `additional_settings` | object | No | Additional model-specific settings. |
+
+## Example request
+
+```bash
+curl --request POST "https://api.uncensored.com/api/v1/images/generations" \
+  --header "x-api-key: YOUR_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "prompt": "A beautiful sunset over mountains, photorealistic, 8k",
+    "model": "model-pro",
+    "image_width": 1024,
+    "image_height": 1024
+  }'
+```
+
+## Sync response
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "completed",
+  "url": "https://storage.googleapis.com/bucket/images/550e8400.jpg",
+  "generation_time": 2.5,
+  "model": "model-pro"
+}
+```
+
+## Async request
+
+```json
+{
+  "prompt": "A cyberpunk cityscape at night",
+  "model": "model-pro",
+  "image_width": 1024,
+  "image_height": 1024,
+  "callback_url": "https://your-server.com/webhook"
+}
+```
+
+## Async response
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "processing",
+  "status_url": "https://api.uncensored.com/api/v1/images/generation/jobs/550e8400-e29b-41d4-a716-446655440000",
+  "webhook_url": "https://your-server.com/webhook",
+  "created_at": "2026-05-09T10:30:00Z"
+}
+```
+
+## Get image job status
+
+```text
+GET /v1/images/generation/jobs/{job_id}
+```
+
+Poll every 2-5 seconds. Image generation typically takes 5-30 seconds.
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "completed",
+  "image_url": "https://storage.googleapis.com/bucket/images/550e8400.jpg",
+  "model": "model-pro",
+  "created_at": "2026-05-09T10:30:00Z",
+  "completed_at": "2026-05-09T10:30:05Z",
+  "generation_time": 2.5
+}
+```
+
+## Status codes
+
+| Status code | Description |
+| --- | --- |
+| `200` | Image generated successfully in sync mode. |
+| `202` | Job accepted and queued for async mode. |
+| `400` | Invalid request parameters. |
+| `402` | Insufficient funds. |
+| `403` | Content moderation failed, or scope does not permit this model. |
+| `429` | Rate limit exceeded. |
+| `500` | Internal server error. |
+

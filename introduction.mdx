@@ -1,0 +1,70 @@
+---
+title: "Introduction"
+description: "Start building with the Uncensored AI Developers API."
+---
+
+# Uncensored AI Developers API
+
+The Uncensored AI Developers API gives developers programmatic access to media generation and AI model workflows.
+
+<Note>
+  Image generation is the only live public model surface in this documentation iteration. Chat, image editing, video, audio, tools, and embeddings are marked as coming soon until those surfaces are ready for developer use.
+</Note>
+
+## Base URL
+
+```text
+https://api.uncensored.com/api
+```
+
+All documented endpoint paths are relative to this base URL. For example:
+
+```text
+POST https://api.uncensored.com/api/v1/images/generations
+```
+
+## Current availability
+
+| Product area | Status | Notes |
+| --- | --- | --- |
+| Image generation | <Badge color="green" shape="pill">Live</Badge> | Generate images from text prompts. |
+| Image studio / editing | <Badge color="orange" shape="pill">Coming soon</Badge> | Clothing modification, face swap, and image edit workflows are not public yet. |
+| Chat completions | <Badge color="orange" shape="pill">Coming soon</Badge> | OpenAI-compatible chat API planned. |
+| Video generation | <Badge color="orange" shape="pill">Coming soon</Badge> | Async video generation planned. |
+| Audio | <Badge color="orange" shape="pill">Coming soon</Badge> | Audio APIs planned. |
+| Tools | <Badge color="orange" shape="pill">Coming soon</Badge> | Utility APIs such as prompt enhancement planned. |
+| Embeddings | <Badge color="orange" shape="pill">Coming soon</Badge> | Embedding APIs planned. |
+
+## Quick start
+
+Generate an image with a live image model:
+
+```bash
+curl --request POST "https://api.uncensored.com/api/v1/images/generations" \
+  --header "x-api-key: YOUR_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "model": "model-dev",
+    "prompt": "A cinematic portrait, natural light, high detail",
+    "image_width": 1024,
+    "image_height": 1024
+  }'
+```
+
+## Response format
+
+Successful API responses return JSON. Async endpoints return a `job_id` and a `status_url` that can be polled until the job completes.
+
+Errors use a consistent envelope:
+
+```json
+{
+  "error": {
+    "message": "Human-readable error description",
+    "type": "invalid_request_error",
+    "param": "model",
+    "code": "model_not_found"
+  }
+}
+```
+

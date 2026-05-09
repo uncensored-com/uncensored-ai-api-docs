@@ -1,0 +1,39 @@
+---
+title: "Rate Limits"
+description: "Understand request limits, concurrency limits, and retry behavior."
+---
+
+# Rate Limits
+
+Rate limits are enforced per API key, with an additional global per-IP ceiling applied before authentication.
+
+## Tiers
+
+| Tier | Requests / minute | Burst / second | Max concurrent jobs | Auto-upgrade at |
+| --- | --: | --: | --: | --- |
+| Free | 20 | 3 | 2 | $0 default |
+| Tier 1 | 100 | 10 | 10 | At least $10 total spend |
+| Tier 2 | 500 | 25 | 50 | At least $50 total spend |
+| Tier 3 | 2,000 | 50 | 200 | At least $250 total spend |
+| Enterprise | 5,000 | 100 | 500 | Contact support |
+
+The Free tier also has a 1,000 requests/day cap. Paid tiers have no daily cap.
+
+## Handling 429 responses
+
+When you exceed a limit, the API returns `429 Too Many Requests`.
+
+```text
+HTTP/1.1 429 Too Many Requests
+retry-after: 12
+x-ratelimit-limit-requests: 100
+x-ratelimit-remaining-requests: 0
+x-ratelimit-reset-requests: 2026-05-09T10:31:00Z
+```
+
+Wait the number of seconds in `retry-after` before retrying. Clients should use exponential backoff with jitter.
+
+## Failure policy
+
+If rate-limiting infrastructure is temporarily unavailable, requests are allowed through. Limits resume automatically when infrastructure recovers.
+

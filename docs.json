@@ -1,0 +1,86 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Uncensored AI",
+  "colors": {
+    "primary": "#ff3b00"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "introduction",
+              "authentication"
+            ]
+          },
+          {
+            "group": "Images",
+            "pages": [
+              "images/overview",
+              "images/generation",
+              "images/models",
+              "images/studio-coming-soon"
+            ]
+          },
+          {
+            "group": "Rate Limits",
+            "pages": [
+              "rate-limits"
+            ]
+          },
+          {
+            "group": "Error Codes",
+            "pages": [
+              "error-codes"
+            ]
+          },
+          {
+            "group": "Chat",
+            "pages": [
+              "chat/overview",
+              "chat/completions-coming-soon",
+              "chat/models-coming-soon"
+            ]
+          },
+          {
+            "group": "Audio",
+            "pages": [
+              "audio/overview"
+            ]
+          },
+          {
+            "group": "Video",
+            "pages": [
+              "video/overview",
+              "video/generation-coming-soon"
+            ]
+          },
+          {
+            "group": "Tools",
+            "pages": [
+              "tools/overview"
+            ]
+          },
+          {
+            "group": "Embeddings",
+            "pages": [
+              "embeddings/overview"
+            ]
+          },
+          {
+            "group": "Platform",
+            "pages": [
+              "platform/api-keys",
+              "platform/billing",
+              "platform/webhooks"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

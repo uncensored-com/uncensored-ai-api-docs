@@ -1,0 +1,40 @@
+---
+title: "Chat Completions"
+description: "OpenAI-compatible chat completions are coming soon."
+---
+
+# Chat Completions <Badge color="orange" shape="pill">Coming soon</Badge>
+
+```text
+POST /v1/chat/completions
+```
+
+This endpoint is planned as an OpenAI-compatible chat completion API, but it is not live for developers yet.
+
+## Planned request body
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `model` | string | Yes | Model ID to use. |
+| `messages` | array | Yes | Conversation messages. |
+| `temperature` | float | No | Sampling temperature between `0` and `2`. |
+| `top_p` | float | No | Nucleus sampling between `0` and `1`. |
+| `max_tokens` | integer | No | Maximum tokens to generate. |
+| `stream` | boolean | No | Whether to stream Server-Sent Events. |
+
+## Planned SDK shape
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.uncensored.com/api/v1",
+    api_key="YOUR_API_KEY",
+    default_headers={"x-api-key": "YOUR_API_KEY"}
+)
+```
+
+<Warning>
+  Do not treat chat model IDs as available until this page is moved from coming soon to live.
+</Warning>
+

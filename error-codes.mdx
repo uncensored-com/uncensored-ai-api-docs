@@ -1,0 +1,34 @@
+---
+title: "Error Codes"
+description: "Common API error responses and how to handle them."
+---
+
+# Error Codes
+
+All error responses use the same JSON envelope.
+
+```json
+{
+  "error": {
+    "message": "Human-readable error description",
+    "type": "error_type",
+    "param": "parameter_name",
+    "code": "error_code"
+  }
+}
+```
+
+| HTTP status | Error type | Description |
+| --- | --- | --- |
+| `400` | `invalid_request_error` | Malformed request, unsupported parameter, deprecated model, or invalid `Idempotency-Key`. |
+| `401` | `authentication_error` | Missing or invalid API key. |
+| `402` | `insufficient_funds` | Account balance is too low for the operation. |
+| `403` | `permission_error` | API key does not have the required scope, or content moderation failed. |
+| `404` | `not_found` | Requested resource was not found. |
+| `409` | `idempotency_key_in_flight` | A concurrent request with the same `Idempotency-Key` is still processing. |
+| `413` | `file_too_large` | Uploaded file exceeds the maximum allowed size. |
+| `422` | `idempotency_key_reuse` | An `Idempotency-Key` was reused with a different request body. |
+| `429` | `rate_limit_error` | Too many requests. Retry after the `retry-after` header value. |
+| `500` | `internal_server_error` | Unexpected server error. |
+| `503` | `service_unavailable` | Upstream provider is temporarily unavailable. |
+

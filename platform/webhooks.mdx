@@ -1,0 +1,27 @@
+---
+title: "Webhooks"
+description: "Receive async job results via callback URLs."
+---
+
+# Webhooks
+
+Async operations can send results to your `callback_url`.
+
+## Payload
+
+```json
+{
+  "request_id": "job_id_here",
+  "status": "success",
+  "result": {},
+  "timestamp": "2026-05-09T10:30:05Z"
+}
+```
+
+## Best practices
+
+1. Respond with `2xx` within 10 seconds.
+2. Implement idempotency on your receiving endpoint.
+3. Validate that `request_id` matches a job you submitted.
+4. Use HTTPS for every `callback_url`.
+

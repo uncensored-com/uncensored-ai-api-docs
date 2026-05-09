@@ -1,0 +1,56 @@
+---
+title: "Authentication"
+description: "Authenticate API requests with an Uncensored AI API key."
+---
+
+# Authentication
+
+All API requests require an API key.
+
+```text
+x-api-key: YOUR_API_KEY
+```
+
+API keys can be created and managed through the [Developer Dashboard](https://uncensored.com/developer).
+
+## Request headers
+
+| Header | Required | Description |
+| --- | --- | --- |
+| `x-api-key: <key>` | Yes | API key authentication. |
+| `Content-Type: application/json` | Yes, on JSON requests | Standard JSON request body. |
+| `Idempotency-Key: <string>` | No | Safely retry write requests without duplicate jobs or charges. |
+
+## Response headers
+
+Every response includes rate-limit metadata.
+
+| Header | Description |
+| --- | --- |
+| `x-ratelimit-limit-requests` | Your current requests-per-minute ceiling. |
+| `x-ratelimit-remaining-requests` | Requests remaining in the current 60-second window. |
+| `x-ratelimit-reset-requests` | ISO 8601 UTC timestamp when the window resets. |
+| `retry-after` | Returned on `429` responses; seconds to wait before retrying. |
+| `Idempotent-Replay: true` | Returned when a response was served from the idempotency cache. |
+
+## Idempotency
+
+For `POST`, `PUT`, `PATCH`, and `DELETE` requests, pass an `Idempotency-Key` header to safely retry requests.
+
+```text
+Idempotency-Key: image-request-2026-05-09-001
+```
+
+Idempotency behavior:
+
+| Case | Result |
+| --- | --- |
+| First request with a new key | Processed normally and cached for 24 hours. |
+| Retry with same key and same body | Original response is replayed with `Idempotent-Replay: true`. |
+| Retry with same key and different body | Returns `422 idempotency_key_reuse`. |
+| Concurrent retry while original is processing | Returns `409 idempotency_key_in_flight` and `Retry-After: 2`. |
+| Streaming response | Executes normally but is not cached. |
+| Server error or response body larger than 1 MiB | Not cached; retries re-execute the request. |
+
+Keys must be 1-255 characters. Allowed characters are letters, digits, `_`, `-`, `.`, `/`, and `:`.
+

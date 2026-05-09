@@ -1,0 +1,32 @@
+---
+title: "Images"
+description: "Generate images with live Uncensored AI image models."
+---
+
+# Images <Badge color="green" shape="pill">Live</Badge>
+
+Image generation is the first live model surface in the Developers API.
+
+<Columns cols={2}>
+  <Card title="Generate Image" icon="image" href="/images/generation">
+    Create images from text prompts using live image generation models.
+  </Card>
+  <Card title="Image Models" icon="sparkles" href="/images/models">
+    Review live image model IDs, ETAs, and model-specific constraints.
+  </Card>
+</Columns>
+
+<Warning>
+  Image Studio operations such as image edit, clothing modification, and face swap are coming soon and should not be presented as live developer features yet.
+</Warning>
+
+## Live endpoint
+
+```text
+POST /v1/images/generations
+```
+
+## Async workflow
+
+When the request includes `callback_url`, the API queues the job and returns a `202` response with a `job_id` and `status_url`. Without a callback, supported models may return synchronously.
+

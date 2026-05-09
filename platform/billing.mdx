@@ -1,0 +1,30 @@
+---
+title: "Billing"
+description: "Check balances, estimate costs, view transactions, and set spend limits."
+---
+
+# Billing
+
+Billing endpoints let developers check balance, estimate cost, view transactions, and set spend limits.
+
+## Endpoints
+
+| Endpoint | Description |
+| --- | --- |
+| `GET /v1/billing/balance` | Get current balance and held funds. |
+| `GET /v1/billing/transactions` | Retrieve paginated transaction history. |
+| `POST /v1/billing/estimate` | Estimate cost before executing an operation. |
+| `PUT /v1/billing/limits` | Set daily and monthly spend limits. |
+
+## Balance fields
+
+| Field | Description |
+| --- | --- |
+| `balance_usd` | Total account balance, including currently held funds. |
+| `held_usd` | Amount held for pending async jobs. |
+| `available_usd` | Spendable balance. |
+| `daily_spend_usd` | Amount spent today, resetting at UTC midnight. |
+| `monthly_spend_usd` | Amount spent in the current UTC calendar month. |
+
+All `*_nanos` fields are authoritative. `*_usd` fields are rounded for display. 1 USD = 1,000,000,000 nanos.
+
