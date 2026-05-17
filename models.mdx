@@ -1,0 +1,105 @@
+---
+title: "Models"
+description: "Catalog of all models available across the Uncensored AI API."
+---
+
+# Models
+
+A single catalog of every model you can call across the API. Use the `Category` column to filter to a product area, and the `Model ID` exactly as shown when sending requests.
+
+## Categories
+
+| Category | Endpoint | Status |
+| --- | --- | --- |
+| Image Generation | `POST /v1/images/generations` | <Badge color="green" shape="pill">Live</Badge> |
+| Image Studio (edit) | `POST /v1/images/studio/edit` | <Badge color="green" shape="pill">Live</Badge> |
+| Chat | `POST /v1/chat/completions` | <Badge color="orange" shape="pill">Coming soon</Badge> |
+| Video | `POST /v1/videos/...` | <Badge color="orange" shape="pill">Coming soon</Badge> |
+| Audio | `POST /v1/audio/...` | <Badge color="orange" shape="pill">Coming soon</Badge> |
+
+## Image Generation
+
+Default model: `model-dev`. All image generation models accept dimensions between 256 and 2,048 px in multiples of 8, unless otherwise noted. Endpoint: [`POST /v1/images/generations`](/images/generation).
+
+| Model ID | Status | Description | ETA |
+| --- | --- | --- | --- |
+| `model-dev` | <Badge color="green" shape="pill">Live</Badge> | Default. Fast, good quality. | ~15s |
+| `model-pro` | <Badge color="green" shape="pill">Live</Badge> | Premium quality. | ~15s |
+| `model-1.1` | <Badge color="green" shape="pill">Live</Badge> | Higher-fidelity variant. | ~15s |
+| `model-1.2` | <Badge color="green" shape="pill">Live</Badge> | Alternate quality profile. | ~30s |
+| `seedream-v4.5` | <Badge color="green" shape="pill">Live</Badge> | Seedream v4.5. | ~20s |
+| `seedream-v5` | <Badge color="green" shape="pill">Live</Badge> | Seedream v5. | ~15s |
+| `flux-2` | <Badge color="green" shape="pill">Live</Badge> | Flux 2. | ~15s |
+| `flux-2-pro` | <Badge color="green" shape="pill">Live</Badge> | Flux 2 Pro. | ~20s |
+| `lustify-sdxl` | <Badge color="green" shape="pill">Live</Badge> | Lustify SDXL. Max dimension: 1,280 px. | ~25s |
+| `lustify-v7` | <Badge color="green" shape="pill">Live</Badge> | Lustify v7. Max dimension: 1,280 px. | ~30s |
+| `prefect-pony-xl` | <Badge color="green" shape="pill">Live</Badge> | Prefect Pony XL. | ~10s |
+| `wan-2.6` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.6. | ~15s |
+| `wan-2.7-text-to-image` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 text-to-image. | ~15s |
+| `wan-2.7-text-to-image-pro` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 text-to-image Pro. | ~20s |
+| `nano-banana` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana. | ~15s |
+| `nano-banana-2` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana 2. Variable pricing: `resolution` = `1k`, `2k`, or `4k`. | ~15s |
+| `nano-banana-pro` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana Pro. | ~20s |
+| `nano-banana-pro-ultra` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana Pro Ultra. Variable pricing: `resolution` = `4k` or `8k`. | ~20s |
+| `gpt-image` | <Badge color="green" shape="pill">Live</Badge> | GPT Image. Variable pricing: `quality` = `medium` or `high`. | ~20s |
+| `gpt-image-2` | <Badge color="green" shape="pill">Live</Badge> | GPT Image 2. Supports aspect ratios `1:1`, `3:2`, `2:3`, `3:4`, `4:3`, `4:5`, `5:4`, `9:16`, `16:9`, `21:9`. | ~20s |
+
+## Image Studio
+
+Edit existing images with a text instruction and one or more reference images. Default model: `standard`. Models marked "multi-image" accept up to 5 images in `image_urls`. Endpoint: [`POST /v1/images/studio/edit`](/images/studio).
+
+| Model ID | Status | Description | Multi-image | ETA |
+| --- | --- | --- | --- | --- |
+| `standard` | <Badge color="green" shape="pill">Live</Badge> | Default edit model. Fast, balanced quality. | Yes | ~8s |
+| `pro` | <Badge color="green" shape="pill">Live</Badge> | Premium edit model, highest quality. | Yes | ~10s |
+| `qwen-image/edit-2511` | <Badge color="green" shape="pill">Live</Badge> | Qwen Image Edit 2511. Up to 3 input images. | Yes (up to 3) | ~15s |
+| `seedream-v5` | <Badge color="green" shape="pill">Live</Badge> | Seedream v5 Lite edit. | Yes | ~15s |
+| `Seedream-4.5-uncensored` | <Badge color="green" shape="pill">Live</Badge> | Seedream 4.5 (uncensored profile). | Yes | ~15s |
+| `seedream-v4.5/edit-sequential` | <Badge color="green" shape="pill">Live</Badge> | Seedream 4.5 sequential edit — applies edits in order across multiple images. | Yes | ~25s |
+| `seedream-v5.0-lite/edit-sequential` | <Badge color="green" shape="pill">Live</Badge> | Seedream v5 Lite sequential edit. | Yes | ~25s |
+| `Wan-2.6` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.6 edit. | Yes | ~20s |
+| `Wan-2.6-image-edit` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.6 image-edit variant. | Yes | ~15s |
+| `wan-2.7-image-edit` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 image edit. | Yes | ~15s |
+| `wan-2.7-image-edit-pro` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 image edit Pro, higher fidelity. | Yes | ~20s |
+| `group-edit` | <Badge color="green" shape="pill">Live</Badge> | Group photo edit — tuned for multi-subject scenes. | Yes | ~20s |
+| `nano-banana-2/edit` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana 2 edit. Variable pricing: `resolution` = `1k`, `2k`, or `4k`. | Yes | ~15s |
+| `nano-banana-2/edit-fast` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana 2 edit (fast). Variable pricing: `resolution` = `2k` or `4k`. | Yes | ~12s |
+| `gpt-image-2/edit` | <Badge color="green" shape="pill">Live</Badge> | GPT Image 2 edit. Variable pricing: `quality` = `low`, `medium`, or `high`; `resolution` = `1k` or `2k`. | Yes | ~20s |
+| `xai/grok-imagine-image/edit` | <Badge color="green" shape="pill">Live</Badge> | Grok Imagine edit. | Yes | ~15s |
+
+## Chat
+
+OpenAI-compatible chat completions endpoint. Coming soon.
+
+| Model ID | Status | Description |
+| --- | --- | --- |
+| `model_t_2` | <Badge color="orange" shape="pill">Coming soon</Badge> | Model T 2.0 — smarter and reliable. |
+| `model_t_extended` | <Badge color="orange" shape="pill">Coming soon</Badge> | Model T 2.0 Extended — longer context. |
+| `gpt_5` | <Badge color="orange" shape="pill">Coming soon</Badge> | GPT 5. |
+| `grok-3` | <Badge color="orange" shape="pill">Coming soon</Badge> | Grok 3. |
+| `grok-4` | <Badge color="orange" shape="pill">Coming soon</Badge> | Grok 4. |
+| `grok-4-fast` | <Badge color="orange" shape="pill">Coming soon</Badge> | Grok 4 Fast. |
+| `grok-41-fast` | <Badge color="orange" shape="pill">Coming soon</Badge> | Grok 4.1 Fast. |
+| `deepseek-r1` | <Badge color="orange" shape="pill">Coming soon</Badge> | DeepSeek R1. |
+| `kimi-k2-thinking` | <Badge color="orange" shape="pill">Coming soon</Badge> | Kimi K2 Thinking. |
+| `claude-opus-45` | <Badge color="orange" shape="pill">Coming soon</Badge> | Claude Opus 4.5. |
+
+## Video
+
+Video models will be published when the video endpoints go live. See [Video](/video/overview).
+
+## Audio
+
+Audio models will be published when the audio endpoints go live. See [Audio](/audio/overview).
+
+## Variable-pricing parameters
+
+A few models price the request based on quality or resolution. Pass these in `additional_settings` (or as documented per endpoint):
+
+| Parameter | Accepted values | Used by |
+| --- | --- | --- |
+| `resolution` | `0.5k`, `1k`, `2k`, `4k`, `8k` | Models marked "Variable pricing: `resolution`" |
+| `quality` | `low`, `medium`, `high` | Models marked "Variable pricing: `quality`" |
+| `aspect_ratio` | `1:1`, `3:2`, `2:3`, `3:4`, `4:3`, `4:5`, `5:4`, `9:16`, `16:9`, `21:9` (plus `1:4`, `4:1`, `1:8`, `8:1` on select models) | Models that accept explicit aspect ratios |
+
+Not every model supports every value — refer to the model row for what's accepted.

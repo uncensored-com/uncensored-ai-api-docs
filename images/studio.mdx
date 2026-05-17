@@ -1,0 +1,121 @@
+---
+title: "Image Studio — Edit"
+description: "Edit existing images with a text prompt and reference image(s)."
+---
+
+# Image Studio — Edit <Badge color="green" shape="pill">Live</Badge>
+
+```text
+POST /v1/images/studio/edit
+```
+
+Edit one or more input images with a text instruction. The endpoint is always async — it accepts your job and returns immediately with a `job_id`. Retrieve the result by polling the `status_url` or by supplying a `callback_url` to receive a webhook when the job completes.
+
+## Request body
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `prompt` | string | Yes | Editing instructions. 1-2,000 characters. |
+| `image_urls` | array of strings | Yes | 1-5 reference image URLs to edit. Some models use only the first image — see the [model catalog](/models#image-studio). |
+| `model` | string | No | Edit model to use. Default: `standard`. Full list in the [model catalog](/models#image-studio). |
+| `callback_url` | string | No | Webhook URL that will receive the final result. |
+| `additional_settings` | object | No | Model-specific settings (e.g., `resolution`, `quality`, `aspect_ratio`). Refer to the [model catalog](/models#image-studio) for accepted values per model. |
+
+## Example request
+
+```bash
+curl --request POST "https://api.uncensored.com/api/v1/images/studio/edit" \
+  --header "x-api-key: YOUR_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "prompt": "Add a vibrant sunset background and warm lighting",
+    "image_urls": ["https://example.com/photo.jpg"],
+    "model": "pro",
+    "callback_url": "https://your-server.com/webhook"
+  }'
+```
+
+## Submit response
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "processing",
+  "status_url": "https://api.uncensored.com/api/v1/images/studio/edit/jobs/550e8400-e29b-41d4-a716-446655440000",
+  "mode": "edit",
+  "webhook_url": "https://your-server.com/webhook",
+  "created_at": "2026-05-17T10:30:00Z"
+}
+```
+
+## Get job status
+
+```text
+GET /v1/images/studio/edit/jobs/{job_id}
+```
+
+Poll every 2-5 seconds. Most jobs complete in 10-90 seconds depending on the model.
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "completed",
+  "image_url": "https://media.lesscensored.com/images/abc123.png",
+  "model": "pro",
+  "is_fallback": false,
+  "error": null,
+  "created_at": "2026-05-17T10:30:00Z",
+  "completed_at": "2026-05-17T10:30:15Z",
+  "processing_time": 15.2
+}
+```
+
+### Response fields
+
+| Field | Description |
+| --- | --- |
+| `job_id` | ID of the job. |
+| `status` | `processing`, `completed`, or `failed`. |
+| `image_url` | URL of the edited image when `status` is `completed`. |
+| `model` | The model that produced the result. |
+| `is_fallback` | `true` if the requested model was temporarily unavailable and a substitute produced the result. The `model` field reports which one. |
+| `error` | Error message when `status` is `failed`; otherwise `null`. |
+| `processing_time` | Total time in seconds the job took to complete. |
+
+## Webhook payload
+
+If you supplied `callback_url`, the same JSON shape as the status response is POSTed to your webhook once the job reaches a terminal state (`completed` or `failed`).
+
+## Multi-image edits
+
+Pass up to 5 image URLs in `image_urls`. The first image is typically the primary subject; additional images are treated as references. Not every model supports multi-image — the [model catalog](/models#image-studio) marks which models do.
+
+## Variable pricing
+
+Models such as `nano-banana-2/edit`, `nano-banana-2/edit-fast`, and `gpt-image-2/edit` price the request based on `resolution` and/or `quality`. Pass these in `additional_settings`:
+
+```json
+{
+  "prompt": "Replace the background with a snowy mountain scene",
+  "image_urls": ["https://example.com/photo.jpg"],
+  "model": "gpt-image-2/edit",
+  "additional_settings": {
+    "quality": "medium",
+    "resolution": "2k",
+    "aspect_ratio": "16:9"
+  }
+}
+```
+
+See the [model catalog](/models#image-studio) for each model's accepted values.
+
+## Status codes
+
+| Status code | Description |
+| --- | --- |
+| `202` | Job accepted and queued. |
+| `400` | Invalid request (e.g., missing `image_urls`, unknown `model`). |
+| `402` | Insufficient funds. |
+| `403` | Content moderation failed, or your API key's scope does not permit this model. |
+| `429` | Rate limit exceeded. |
+| `500` | Internal server error. |

@@ -18,12 +18,18 @@
             ]
           },
           {
+            "group": "Models",
+            "pages": [
+              "models"
+            ]
+          },
+          {
             "group": "Images",
             "pages": [
               "images/overview",
               "images/generation",
-              "images/models",
-              "images/studio-coming-soon"
+              "images/studio",
+              "images/models"
             ]
           },
           {

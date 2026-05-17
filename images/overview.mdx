@@ -1,28 +1,33 @@
 ---
 title: "Images"
-description: "Generate images from text prompts with the Uncensored AI image API."
+description: "Generate and edit images with the Uncensored AI image APIs."
 ---
 
 # Images
 
-Generate images from text prompts using a single endpoint and a growing catalog of image models.
+Two endpoints share the same growing model catalog: generate images from a text prompt, or edit existing images with a text instruction plus reference image(s).
 
 <Columns cols={2}>
   <Card title="Generate Image" icon="image" href="/images/generation">
     Create images from text prompts.
   </Card>
-  <Card title="Image Models" icon="sparkles" href="/images/models">
-    Browse available model IDs, generation times, and per-model constraints.
+  <Card title="Image Studio (Edit)" icon="wand-magic-sparkles" href="/images/studio">
+    Edit existing images with a text instruction.
+  </Card>
+  <Card title="Models" icon="sparkles" href="/models">
+    Browse all available model IDs across categories.
   </Card>
 </Columns>
 
-## Endpoint
+## Endpoints
 
 ```text
 POST /v1/images/generations
+POST /v1/images/studio/edit
 ```
 
 ## Sync and async modes
 
-Include a `callback_url` to run the job asynchronously — the API responds with `202`, a `job_id`, and a `status_url` you can poll. Omit `callback_url` and supported models return the image synchronously.
+`POST /v1/images/generations` returns synchronously by default. Include a `callback_url` to run the job asynchronously — the API responds with `202`, a `job_id`, and a `status_url` you can poll.
 
+`POST /v1/images/studio/edit` is always async — it returns immediately with a `job_id` you can poll or pair with a `callback_url` for webhook delivery.
