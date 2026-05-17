@@ -78,6 +78,12 @@
               "platform/billing",
               "platform/webhooks"
             ]
+          },
+          {
+            "group": "Support",
+            "pages": [
+              "support"
+            ]
           }
         ]
       }

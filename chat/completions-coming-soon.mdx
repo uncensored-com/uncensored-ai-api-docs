@@ -9,9 +9,9 @@ description: "OpenAI-compatible chat completions are coming soon."
 POST /v1/chat/completions
 ```
 
-This endpoint is planned as an OpenAI-compatible chat completion API, but it is not live for developers yet.
+An OpenAI-compatible chat completion endpoint. Coming soon — the request shape below is what to expect at launch.
 
-## Planned request body
+## Request body
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -22,7 +22,7 @@ This endpoint is planned as an OpenAI-compatible chat completion API, but it is 
 | `max_tokens` | integer | No | Maximum tokens to generate. |
 | `stream` | boolean | No | Whether to stream Server-Sent Events. |
 
-## Planned SDK shape
+## SDK example
 
 ```python
 from openai import OpenAI
@@ -34,7 +34,7 @@ client = OpenAI(
 )
 ```
 
-<Warning>
-  Do not treat chat model IDs as available until this page is moved from coming soon to live.
-</Warning>
+<Note>
+  Chat model IDs become callable when this page moves from **Coming soon** to **Live**. Join the [Discord](/support) to get notified.
+</Note>
 

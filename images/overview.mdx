@@ -1,32 +1,28 @@
 ---
 title: "Images"
-description: "Generate images with live Uncensored AI image models."
+description: "Generate images from text prompts with the Uncensored AI image API."
 ---
 
-# Images <Badge color="green" shape="pill">Live</Badge>
+# Images
 
-Image generation is the first live model surface in the Developers API.
+Generate images from text prompts using a single endpoint and a growing catalog of image models.
 
 <Columns cols={2}>
   <Card title="Generate Image" icon="image" href="/images/generation">
-    Create images from text prompts using live image generation models.
+    Create images from text prompts.
   </Card>
   <Card title="Image Models" icon="sparkles" href="/images/models">
-    Review live image model IDs, ETAs, and model-specific constraints.
+    Browse available model IDs, generation times, and per-model constraints.
   </Card>
 </Columns>
 
-<Warning>
-  Image Studio operations such as image edit, clothing modification, and face swap are coming soon and should not be presented as live developer features yet.
-</Warning>
-
-## Live endpoint
+## Endpoint
 
 ```text
 POST /v1/images/generations
 ```
 
-## Async workflow
+## Sync and async modes
 
-When the request includes `callback_url`, the API queues the job and returns a `202` response with a `job_id` and `status_url`. Without a callback, supported models may return synchronously.
+Include a `callback_url` to run the job asynchronously — the API responds with `202`, a `job_id`, and a `status_url` you can poll. Omit `callback_url` and supported models return the image synchronously.
 
