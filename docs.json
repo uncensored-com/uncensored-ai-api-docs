@@ -24,24 +24,23 @@
             ]
           },
           {
-            "group": "Images",
+            "group": "Image Generation",
             "pages": [
-              "images/overview",
               "images/generation",
-              "images/studio",
               "images/models"
             ]
           },
           {
-            "group": "Rate Limits",
+            "group": "Image Studio - Edit",
             "pages": [
-              "rate-limits"
+              "images/studio"
             ]
           },
           {
-            "group": "Error Codes",
+            "group": "Video Studio",
             "pages": [
-              "error-codes"
+              "video/overview",
+              "video/generation-coming-soon"
             ]
           },
           {
@@ -59,13 +58,6 @@
             ]
           },
           {
-            "group": "Video",
-            "pages": [
-              "video/overview",
-              "video/generation-coming-soon"
-            ]
-          },
-          {
             "group": "Tools",
             "pages": [
               "tools/overview"
@@ -75,6 +67,18 @@
             "group": "Embeddings",
             "pages": [
               "embeddings/overview"
+            ]
+          },
+          {
+            "group": "Rate Limits",
+            "pages": [
+              "rate-limits"
+            ]
+          },
+          {
+            "group": "Error Codes",
+            "pages": [
+              "error-codes"
             ]
           },
           {
