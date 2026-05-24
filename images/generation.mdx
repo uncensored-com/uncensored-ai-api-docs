@@ -15,14 +15,19 @@ Generate an image from a text prompt. The endpoint can return synchronously or q
 
 | Parameter | Type | Required | Description |
 | --- | --- | --- | --- |
-| `prompt` | string | Yes | Text prompt describing the image. 1-2,000 characters. |
-| `model` | string | No | Image model to use. Default: `model-dev`. |
-| `image_width` | integer | No | Width in pixels. 256-2,048, must be a multiple of 8. Default: `1024`. |
-| `image_height` | integer | No | Height in pixels. 256-2,048, must be a multiple of 8. Default: `1024`. |
+| `prompt` | string | Yes | Text prompt describing the image. 1-2,000 characters after trimming; cannot be empty. |
+| `model` | string | Yes | Image model to use. The API defaults to `model-dev` if omitted, but integrations should send this explicitly. See [Image Models](/images/models). |
+| `image_width` | integer | No | Width in pixels. Schema accepts 256-2,048. Some providers clamp or map dimensions internally. Default: `1024`. |
+| `image_height` | integer | No | Height in pixels. Schema accepts 256-2,048. Some providers clamp or map dimensions internally. Default: `1024`. |
 | `callback_url` | string | No | Webhook URL for async delivery. |
-| `resolution` | string | No | Resolution hint for variable-pricing models, such as `1k`, `2k`, `4k`, or `8k`. |
-| `quality` | string | No | Quality hint for variable-pricing models, such as `medium` or `high`. |
-| `additional_settings` | object | No | Additional model-specific settings. |
+| `resolution` | string | No | Top-level convenience param for variable-size models. Also passed to provider settings. |
+| `quality` | string | No | Top-level convenience param for quality-priced models. Also passed to provider settings. |
+| `additional_settings` | object | No | Model-specific settings such as `seed`, `aspect_ratio`, `negative_prompt`, `num_inference_steps`, `guidance_scale`, `output_format`, `enable_web_search`, and `enable_image_search`. |
+| `enable_fallback` | boolean | No | Defaults to `true`. Image generation models currently have no fallback configured. |
+
+## Model support
+
+See [Image Models](/images/models) for every live model's required params, optional supported params, cost, and ETA.
 
 ## Example request
 
@@ -105,4 +110,3 @@ Poll every 2-5 seconds. Image generation typically takes 5-30 seconds.
 | `403` | Content moderation failed, or scope does not permit this model. |
 | `429` | Rate limit exceeded. |
 | `500` | Internal server error. |
-

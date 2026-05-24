@@ -5,29 +5,37 @@ description: "Live image generation model IDs."
 
 # Image Models <Badge color="green" shape="pill">Live</Badge>
 
-Default model: `model-dev`.
+Default model: `model-dev`. The API can default `model` when omitted, but production integrations should send it explicitly so the selected provider is clear.
 
-All image generation models accept dimensions between 256 and 2,048 px in multiples of 8, unless otherwise noted.
+`common` means `image_width`, `image_height`, `callback_url`, `resolution`, `quality`, `additional_settings`, and `enable_fallback`. Model-specific knobs such as `seed`, `negative_prompt`, `aspect_ratio`, `num_inference_steps`, `guidance_scale`, and `output_format` are passed in `additional_settings` unless they are documented as top-level convenience params.
 
-| Model ID | Status | Description | ETA |
-| --- | --- | --- | --- |
-| `model-dev` | <Badge color="green" shape="pill">Live</Badge> | Flux Dev, fast and good quality. Default model. | ~15s |
-| `model-pro` | <Badge color="green" shape="pill">Live</Badge> | Flux Pro, best quality. | ~15s |
-| `model-1.1` | <Badge color="green" shape="pill">Live</Badge> | Flux Pro v1.1. | ~15s |
-| `model-1.2` | <Badge color="green" shape="pill">Live</Badge> | Wan v2.2 image. | ~30s |
-| `seedream-v4.5` | <Badge color="green" shape="pill">Live</Badge> | Seedream v4.5. | ~20s |
-| `seedream-v5` | <Badge color="green" shape="pill">Live</Badge> | Seedream v5. | ~15s |
-| `flux-2` | <Badge color="green" shape="pill">Live</Badge> | Flux 2. | ~15s |
-| `flux-2-pro` | <Badge color="green" shape="pill">Live</Badge> | Flux 2 Pro. | ~20s |
-| `lustify-sdxl` | <Badge color="green" shape="pill">Live</Badge> | Lustify SDXL. Max dimension: 1,280 px. | ~25s |
-| `lustify-v7` | <Badge color="green" shape="pill">Live</Badge> | Lustify v7. Max dimension: 1,280 px. | ~30s |
-| `prefect-pony-xl` | <Badge color="green" shape="pill">Live</Badge> | Prefect Pony XL. | ~10s |
-| `wan-2.6` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.6. | ~15s |
-| `wan-2.7-text-to-image` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 text-to-image. | ~15s |
-| `wan-2.7-text-to-image-pro` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 text-to-image Pro. | ~20s |
-| `nano-banana` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana. | ~15s |
-| `nano-banana-2` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana 2. Variable pricing: `resolution` can be `1k`, `2k`, or `4k`. | ~15s |
-| `nano-banana-pro` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana Pro. | ~20s |
-| `nano-banana-pro-ultra` | <Badge color="green" shape="pill">Live</Badge> | Nano Banana Pro Ultra. Variable pricing: `resolution` can be `4k` or `8k`. | ~20s |
-| `gpt-image` | <Badge color="green" shape="pill">Live</Badge> | GPT Image. Variable pricing: `quality` can be `medium` or `high`. | ~20s |
-| `gpt-image-2` | <Badge color="green" shape="pill">Live</Badge> | GPT Image 2. Supports aspect ratios `1:1`, `3:2`, `2:3`, `3:4`, `4:3`, `4:5`, `5:4`, `9:16`, `16:9`, and `21:9`. | ~20s |
+| Model ID | Display name | Required params | Optional supported params | Cost | ETA |
+| --- | --- | --- | --- | --- | --- |
+| `model-dev` | Flux Dev | `prompt`, `model` | common + `seed`, `num_inference_steps`, `guidance_scale`, `output_format` | `$0.10` | ~15s |
+| `model-pro` | Flux Pro | `prompt`, `model` | common + `seed`, `num_inference_steps`, `guidance_scale`, `output_format` | `$0.10` | ~15s |
+| `model-1.1` | Flux Pro v1.1 | `prompt`, `model` | common + `seed`, `output_format` | `$0.10` | ~15s |
+| `model-1.2` | Wan v2.2 | `prompt`, `model` | common + `seed`, `negative_prompt`, `num_inference_steps`, `guidance_scale` | `$0.10` | ~30s |
+| `seedream-v4.5` | Seedream v4.5 | `prompt`, `model` | common + `seed` | `$0.10` | ~20s |
+| `flux-2-pro` | Flux 2 Pro | `prompt`, `model` | common + `seed`, `output_format` | `$0.10` | ~20s |
+| `flux-2` | Flux 2 | `prompt`, `model` | common + `seed`, `num_inference_steps`, `guidance_scale`, `output_format` | `$0.10` | ~15s |
+| `lustify-v7` | Lustify v7 | `prompt`, `model` | common + `seed`, `negative_prompt`; max dimension 1,280 px | `$0.10` | ~30s |
+| `nano-banana-pro-ultra` | Nano Banana Pro Ultra | `prompt`, `model` | common + `seed`, `aspect_ratio`, `resolution`, `output_format` | `4k $0.20`, `8k $0.30` | ~20s |
+| `seedream-v5` | Seedream v5 | `prompt`, `model` | common + `seed` | `$0.10` | ~15s |
+| `prefect-pony-xl` | Prefect Pony XL | `prompt`, `model` | common + `seed` | `$0.10` | ~10s |
+| `wan-2.6` | Wan 2.6 | `prompt`, `model` | common + `seed` | `$0.10` | ~15s |
+| `wan-2.7-text-to-image` | Wan 2.7 Text-to-Image | `prompt`, `model` | common + `seed` | `$0.10` | ~15s |
+| `wan-2.7-text-to-image-pro` | Wan 2.7 Text-to-Image Pro | `prompt`, `model` | common + `seed` | `$0.10` | ~20s |
+| `nano-banana-2` | Nano Banana 2 | `prompt`, `model` | common + `seed`, `aspect_ratio`, `resolution`, `output_format`, `enable_web_search`, `enable_image_search` | `1k/2k $0.10`, `4k $0.20` | ~15s |
+| `gpt-image-2` | GPT Image 2 Text-to-Image | `prompt`, `model` | common + `seed`, `aspect_ratio`, `resolution`, `quality`, `output_format` | `$0.10` | ~20s |
+| `nano-banana-pro` | Nano Banana Pro | `prompt`, `model` | common + `seed`, `aspect_ratio`, `resolution`, `output_format` | `$0.20` | ~20s |
+| `nano-banana` | Nano Banana | `prompt`, `model` | common + `seed`, `aspect_ratio`, `resolution`, `output_format`, `enable_web_search`, `enable_image_search` | `$0.10` | ~15s |
+| `gpt-image` | GPT Image | `prompt`, `model` | common + `seed`, `aspect_ratio`, `resolution`, `quality`, `output_format` | `medium $0.10`, `default/high $0.20` | ~20s |
+| `realism` | Realism | `prompt`, `model` | common + `negative_prompt`; dimensions accepted but provider ignores exact sizing | `$0.10` | ~20s |
+| `realism-2` | Realism 2.0 | `prompt`, `model` | common + `negative_prompt`; dimensions accepted but provider ignores exact sizing | `$0.20` | ~20s |
+| `z-image-turbo` | Z Image Turbo | `prompt`, `model` | common + `negative_prompt`; dimensions accepted but provider ignores exact sizing | `$0.20` | ~20s |
+
+## Deprecated models
+
+| Model ID | Display name | Status |
+| --- | --- | --- |
+| `lustify-sdxl` | Lustify SDXL | Deprecated; route returns `Model deprecated`. |
