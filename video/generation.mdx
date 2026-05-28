@@ -1,0 +1,98 @@
+---
+title: "Video Generation"
+description: "Generate videos from text, images, or existing video clips."
+---
+
+# Video Generation <Badge color="green" shape="pill">Live</Badge>
+
+```text
+POST /v1/videos/generations
+```
+
+Generate a video from a text prompt, reference image, or source video. The endpoint queues work for async delivery via `callback_url`.
+
+## Request body
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `model` | string | Yes | Video model ID. See the model table below. |
+| `prompt` | string | Conditional | Text prompt or editing instruction. Required for text-to-video and supported on transform models that list it. |
+| `callback_url` | string | No | Webhook URL for async delivery. |
+| `seconds` | number | No | Requested clip duration. Supported values vary by model. |
+| `resolution` | string | No | Model-specific output resolution such as `480p`, `540p`, `580p`, `720p`, `1080p`, or a range where listed. |
+| `aspect_ratio` | string | No | Output aspect ratio for models that support explicit aspect control. |
+| `image_url` | string | Conditional | Required for image-to-video models unless the row says the image is optional. |
+| `end_image_url` | string | No | Optional ending frame for models that support start/end image guidance. |
+| `video_url` | string | Conditional | Required for video-to-video, video edit, and video extend models. |
+| `additional_settings` | object | No | Model-specific provider settings such as `seed`, `negative_prompt`, and `generate_audio`. |
+| `enable_fallback` | boolean | No | Enable automatic model fallback. Default: `true`. |
+
+## Models
+
+`common` means `callback_url`, `additional_settings`, and `enable_fallback`. Model-specific provider knobs such as `seed`, `negative_prompt`, and `generate_audio` are passed in `additional_settings`.
+
+| Model ID | Status | Display name | Type | Required params | Optional supported params | Cost | ETA |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `t2v-turbo` | <Badge color="green" shape="pill">Live</Badge> | Text-to-Video Turbo | Text-to-video | `prompt`, `model` | common + `seconds` (5, 8), `resolution` (`480p`, `720p`), `aspect_ratio`, `seed`, `negative_prompt` | `$0.40` | ~43s |
+| `t2v-standard` | <Badge color="green" shape="pill">Live</Badge> | Text-to-Video Standard | Text-to-video | `prompt`, `model` | common + `seconds`, `aspect_ratio` (`auto`, `16:9`, `9:16`, `1:1`) | `$1.20` | ~63s |
+| `cosmos-predict` | <Badge color="green" shape="pill">Live</Badge> | Cosmos Predict | Text-to-video | `prompt`, `model` | common + `seconds`, `aspect_ratio` | `$0.80` | ~90s |
+| `av-gen` | <Badge color="green" shape="pill">Live</Badge> | AV Gen | Text-to-video | `prompt`, `model` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`) | `$1.00` | ~84s |
+| `ltx-distilled` | <Badge color="green" shape="pill">Live</Badge> | LTX Distilled | Text-to-video | `prompt`, `model` | common + `seconds`, `aspect_ratio` | `$0.3996` | ~63s |
+| `seedance-2.0-t2v` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 T2V | Text-to-video | `prompt`, `model` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio` | `$1.80` default | ~70s |
+| `seedance-2.0-fast-t2v` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 Fast T2V | Text-to-video | `prompt`, `model` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio` | `$0.60` default | ~45s |
+| `wan-2.7-t2v` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 T2V | Text-to-video | `prompt`, `model` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`), `aspect_ratio`, `negative_prompt` | `$1.50` default | ~70s |
+| `wan-2.2-ultra-fast-t2v` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.2 Ultra-Fast T2V | Text-to-video | `prompt`, `model` | common + `seconds` (5, 8), `resolution` (`480p`, `720p`), `aspect_ratio`, `seed`, `negative_prompt` | `$0.60` default | ~25s |
+| `i2v-turbo` | <Badge color="green" shape="pill">Live</Badge> | Image-to-Video Turbo | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 8), `resolution` (`480p`, `720p`), `aspect_ratio`, `seed`, `negative_prompt` | about `$0.11` | ~39s |
+| `i2v-standard` | <Badge color="green" shape="pill">Live</Badge> | Image-to-Video Standard | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds`, `resolution` (`480p`, `720p`), `aspect_ratio` (`auto`, `16:9`, `9:16`, `1:1`) | `$0.30-$0.60` | ~38s |
+| `i2v-pro` | <Badge color="green" shape="pill">Live</Badge> | Image-to-Video Pro | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds`, `resolution` (`480p`, `580p`, `720p`), `aspect_ratio` (`16:9`, `9:16`, `1:1`), `end_image_url` | `$0.04-$0.08/sec` | ~63s |
+| `i2v-sora` | <Badge color="green" shape="pill">Live</Badge> | Image-to-Video Sora | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (4, 8, 12), `aspect_ratio` (`16:9`, `9:16`, `1:1`) | about `$0.11/sec` | ~146s |
+| `i2v-sora-pro` | <Badge color="green" shape="pill">Live</Badge> | Image-to-Video Sora Pro | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (4, 8, 12), `resolution` (`720p`, `1080p`), `aspect_ratio` (`16:9`, `9:16`, `1:1`) | `$0.30-$0.50/sec` | ~186s |
+| `wan-2.6` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.6 | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`), `negative_prompt` | `$0.10-$0.15/sec` | ~84s |
+| `wan-2.6-ultra` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.6 Ultra | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`), `negative_prompt` | `$0.10-$0.15/sec` | ~60s |
+| `wan-2.6-flash` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.6 Flash | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`) | `$0.05-$0.075/sec` | ~45s |
+| `wan-2.2-spicy` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.2 Spicy | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 8), `resolution` (`480p`, `720p`), `seed` | `$0.024-$0.048/sec` | ~40s |
+| `wan-2.2-ultra-fast` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.2 Ultra-Fast I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 8), `resolution` (`480p`, `720p`), `aspect_ratio`, `seed`, `negative_prompt` | `$0.008-$0.016/sec` | ~25s |
+| `vidu-q3-spicy` | <Badge color="green" shape="pill">Live</Badge> | Vidu Q3 Spicy | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`540p`, `720p`, `1080p`) | `$0.056-$0.128/sec` | ~60s |
+| `cosmos-predict-i2v` | <Badge color="green" shape="pill">Live</Badge> | Cosmos Predict I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds`, `aspect_ratio` | about `$0.50` | ~90s |
+| `grok-imagine-video` | <Badge color="green" shape="pill">Live</Badge> | Grok Imagine Video | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (6, 10), `resolution` (`480p`, `720p`), `aspect_ratio` (`2:3`, `3:2`, `1:1`, `16:9`, `9:16`) | about `$0.04/sec` | ~20s |
+| `sora-2` | <Badge color="green" shape="pill">Live</Badge> | Sora 2 | Smart-routed video | `prompt`, `model` | common + optional `image_url`, `seconds` (4, 8, 12), `aspect_ratio` (`16:9`, `9:16`, `1:1`) | about `$0.11/sec` | ~117s |
+| `sora-2-pro` | <Badge color="green" shape="pill">Live</Badge> | Sora 2 Pro | Smart-routed video | `prompt`, `model` | common + optional `image_url`, `seconds` (4, 8, 12), `resolution` (`720p`, `1080p`), `aspect_ratio` (`16:9`, `9:16`, `1:1`) | `$0.30-$0.50/sec` | ~169s |
+| `seedance-2.0` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio` | `$0.12-$0.60/sec` | ~70s |
+| `seedance-2.0-fast` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 Fast I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio` | `$0.10-$0.50/sec` | ~45s |
+| `seedance-v1.5-pro-spicy` | <Badge color="green" shape="pill">Live</Badge> | Seedance v1.5 Pro Spicy | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (4-12), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio`, `generate_audio` | `$0.0096-$0.0416/sec` | ~50s |
+| `wan-2.7` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`), `aspect_ratio`, `negative_prompt` | `$0.08-$0.12/sec` | ~70s |
+| `grok-imagine-video-reference` | <Badge color="green" shape="pill">Live</Badge> | Grok Imagine Reference-to-Video | Image-to-video | `prompt`, `model`, `image_url` | common + optional `end_image_url`, `seconds` (6, 10), `resolution` (`480p`, `720p`) | about `$0.04/sec` | ~25s |
+| `video-to-video` | <Badge color="green" shape="pill">Live</Badge> | Video to Video | Video-to-video | `prompt`, `model`, `video_url` | common + `seconds`, `resolution` (`240p`, `360p`, `480p`, `580p`, `720p`) | `$0.04-$0.08/sec` | ~175s |
+| `wan-2.6-v2v` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.6 V2V | Video-to-video | `prompt`, `model`, `video_url` | common + `seconds` (5, 10), `resolution` (`720p`, `1080p`) | `$0.10-$0.15/sec` | ~90s |
+| `wan-2.2-spicy-extend` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.2 Spicy Extend | Video extend | `prompt`, `model`, `video_url` | common + `seconds` (5, 8), `resolution` (`480p`, `720p`) | `$0.024-$0.048/sec` | ~40s |
+| `grok-imagine-video-edit` | <Badge color="green" shape="pill">Live</Badge> | Grok Imagine Edit | Video edit | `prompt`, `model`, `video_url` | common + `seconds` (1-8), `resolution` (`480p`, `720p`) | `$0.06-$0.08/sec` | ~95s |
+| `wan-2.7-video-extend` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 Video Extend | Video extend | `prompt`, `model`, `video_url` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`), `negative_prompt` | `$0.08-$0.12/sec` | ~70s |
+| `grok-imagine-video-extend` | <Badge color="green" shape="pill">Live</Badge> | Grok Imagine Video Extend | Video extend | `prompt`, `model`, `video_url` | common + `seconds` (6, 10) | about `$0.04/sec` | ~25s |
+
+## Example request
+
+```bash
+curl --request POST "https://api.uncensored.com/api/v1/videos/generations" \
+  --header "x-api-key: YOUR_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "prompt": "A cinematic drone shot over a misty mountain range at sunrise",
+    "model": "t2v-turbo",
+    "seconds": 5,
+    "resolution": "720p",
+    "callback_url": "https://your-server.com/webhook"
+  }'
+```
+
+## Example response
+
+```json
+{
+  "id": "vid_abc123",
+  "status": "processing",
+  "model": "t2v-turbo",
+  "created_at": "2025-06-01T12:00:00Z"
+}
+```
+
+When processing completes, the result is delivered to your `callback_url`.
