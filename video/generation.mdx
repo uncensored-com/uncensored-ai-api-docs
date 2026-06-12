@@ -29,7 +29,7 @@ Generate a video from a text prompt, reference image, or source video. The endpo
 
 ## Models
 
-`common` means `callback_url`, `additional_settings`, and `enable_fallback`. Model-specific provider knobs such as `seed`, `negative_prompt`, and `generate_audio` are passed in `additional_settings`.
+`common` means `callback_url`, `additional_settings`, and `enable_fallback`. Model-specific provider knobs such as `seed`, `negative_prompt`, and `generate_audio` are passed in `additional_settings`. `generate_audio` is only supported on audio-capable models (those that list it below); setting `generate_audio: true` adds an audio track and roughly doubles the per-second cost. The cost shown below is the default audio-off rate.
 
 | Model ID | Status | Display name | Type | Required params | Optional supported params | Cost | ETA |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -40,7 +40,7 @@ Generate a video from a text prompt, reference image, or source video. The endpo
 | `ltx-distilled` | <Badge color="green" shape="pill">Live</Badge> | LTX Distilled | Text-to-video | `prompt`, `model` | common + `seconds`, `aspect_ratio` | `$0.3996` | ~63s |
 | `seedance-2.0-t2v` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 T2V | Text-to-video | `prompt`, `model` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio` | `$1.80` default | ~70s |
 | `seedance-2.0-fast-t2v` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 Fast T2V | Text-to-video | `prompt`, `model` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio` | `$0.60` default | ~45s |
-| `wan-2.7-t2v` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 T2V | Text-to-video | `prompt`, `model` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`), `aspect_ratio`, `negative_prompt` | `$1.50` default | ~70s |
+| `wan-2.7-t2v` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 T2V | Text-to-video | `prompt`, `model` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`), `negative_prompt` | `$1.50` default | ~70s |
 | `wan-2.2-ultra-fast-t2v` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.2 Ultra-Fast T2V | Text-to-video | `prompt`, `model` | common + `seconds` (5, 8), `resolution` (`480p`, `720p`), `aspect_ratio`, `seed`, `negative_prompt` | `$0.60` default | ~25s |
 | `i2v-turbo` | <Badge color="green" shape="pill">Live</Badge> | Image-to-Video Turbo | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 8), `resolution` (`480p`, `720p`), `aspect_ratio`, `seed`, `negative_prompt` | about `$0.11` | ~39s |
 | `i2v-standard` | <Badge color="green" shape="pill">Live</Badge> | Image-to-Video Standard | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds`, `resolution` (`480p`, `720p`), `aspect_ratio` (`auto`, `16:9`, `9:16`, `1:1`) | `$0.30-$0.60` | ~38s |
@@ -59,8 +59,12 @@ Generate a video from a text prompt, reference image, or source video. The endpo
 | `sora-2-pro` | <Badge color="green" shape="pill">Live</Badge> | Sora 2 Pro | Smart-routed video | `prompt`, `model` | common + optional `image_url`, `seconds` (4, 8, 12), `resolution` (`720p`, `1080p`), `aspect_ratio` (`16:9`, `9:16`, `1:1`) | `$0.30-$0.50/sec` | ~169s |
 | `seedance-2.0` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio` | `$0.12-$0.60/sec` | ~70s |
 | `seedance-2.0-fast` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 Fast I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio` | `$0.10-$0.50/sec` | ~45s |
+| `seedance-2.0-spicy` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 Spicy I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio`, `generate_audio`, `end_image_url` | `$0.06-$0.30/sec` | ~70s |
+| `seedance-2.0-fast-spicy` | <Badge color="green" shape="pill">Live</Badge> | Seedance 2.0 Fast Spicy I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio`, `generate_audio`, `end_image_url` | `$0.05-$0.25/sec` | ~45s |
 | `seedance-v1.5-pro-spicy` | <Badge color="green" shape="pill">Live</Badge> | Seedance v1.5 Pro Spicy | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (4-12), `resolution` (`480p`, `720p`, `1080p`), `aspect_ratio`, `generate_audio` | `$0.0096-$0.0416/sec` | ~50s |
-| `wan-2.7` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`), `aspect_ratio`, `negative_prompt` | `$0.08-$0.12/sec` | ~70s |
+| `wan-2.7` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`), `negative_prompt` | `$0.08-$0.12/sec` | ~70s |
+| `wan-2.7-pro` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 Pro I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`1080p`, `2k`, `4k`) | `$0.12-$0.16/sec` | ~70s |
+| `wan-2.7-spicy` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.7 Spicy I2V | Image-to-video | `prompt`, `model`, `image_url` | common + `seconds` (5, 10, 15), `resolution` (`720p`, `1080p`) | `$0.10-$0.15/sec` | ~70s |
 | `grok-imagine-video-reference` | <Badge color="green" shape="pill">Live</Badge> | Grok Imagine Reference-to-Video | Image-to-video | `prompt`, `model`, `image_url` | common + optional `end_image_url`, `seconds` (6, 10), `resolution` (`480p`, `720p`) | about `$0.04/sec` | ~25s |
 | `video-to-video` | <Badge color="green" shape="pill">Live</Badge> | Video to Video | Video-to-video | `prompt`, `model`, `video_url` | common + `seconds`, `resolution` (`240p`, `360p`, `480p`, `580p`, `720p`) | `$0.04-$0.08/sec` | ~175s |
 | `wan-2.6-v2v` | <Badge color="green" shape="pill">Live</Badge> | Wan 2.6 V2V | Video-to-video | `prompt`, `model`, `video_url` | common + `seconds` (5, 10), `resolution` (`720p`, `1080p`) | `$0.10-$0.15/sec` | ~90s |
@@ -96,3 +100,22 @@ curl --request POST "https://api.uncensored.com/api/v1/videos/generations" \
 ```
 
 When processing completes, the result is delivered to your `callback_url`.
+
+## Audio on supported models
+
+Audio-capable models (those that list `generate_audio` in the table above, such as `seedance-2.0-spicy`) accept `generate_audio` inside `additional_settings`. It defaults to off; setting it to `true` adds an audio track and roughly doubles the per-second cost.
+
+```bash
+curl --request POST "https://api.uncensored.com/api/v1/videos/generations" \
+  --header "x-api-key: YOUR_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "prompt": "A neon city street at night with ambient sound",
+    "model": "seedance-2.0-spicy",
+    "image_url": "https://your-server.com/start.jpg",
+    "seconds": 5,
+    "resolution": "480p",
+    "additional_settings": { "generate_audio": true },
+    "callback_url": "https://your-server.com/webhook"
+  }'
+```
