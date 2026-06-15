@@ -47,8 +47,8 @@
             "group": "Chat",
             "pages": [
               "chat/overview",
-              "chat/completions-coming-soon",
-              "chat/models-coming-soon"
+              "chat/completions",
+              "chat/models"
             ]
           },
           {

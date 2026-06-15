@@ -17,7 +17,7 @@ A single catalog of model IDs across the API. Use the `Category` column to filte
 | --- | --- | --- |
 | Image Generation | `POST /v1/images/generations` | <Badge color="green" shape="pill">Live</Badge> |
 | Image Studio (edit) | `POST /v1/images/studio/edit` | <Badge color="green" shape="pill">Live</Badge> |
-| Chat | `POST /v1/chat/completions` | <Badge color="orange" shape="pill">Coming soon</Badge> |
+| Chat | `POST /v1/chat/completions` | <Badge color="green" shape="pill">Live</Badge> |
 | Video | `POST /v1/videos/...` | <Badge color="green" shape="pill">Live</Badge> |
 | Audio | `POST /v1/audio/...` | <Badge color="orange" shape="pill">Coming soon</Badge> |
 
@@ -85,20 +85,9 @@ Edit existing images with a text instruction and one or more reference images. D
 
 ## Chat
 
-OpenAI-compatible chat completions endpoint. Coming soon.
+OpenAI-compatible chat completions endpoint. Endpoint: [`POST /v1/chat/completions`](/chat/completions).
 
-| Model ID | Status | Description |
-| --- | --- | --- |
-| `model_t_2` | <Badge color="orange" shape="pill">Coming soon</Badge> | Model T 2.0 — smarter and reliable. |
-| `model_t_extended` | <Badge color="orange" shape="pill">Coming soon</Badge> | Model T 2.0 Extended — longer context. |
-| `gpt_5` | <Badge color="orange" shape="pill">Coming soon</Badge> | GPT 5. |
-| `grok-3` | <Badge color="orange" shape="pill">Coming soon</Badge> | Grok 3. |
-| `grok-4` | <Badge color="orange" shape="pill">Coming soon</Badge> | Grok 4. |
-| `grok-4-fast` | <Badge color="orange" shape="pill">Coming soon</Badge> | Grok 4 Fast. |
-| `grok-41-fast` | <Badge color="orange" shape="pill">Coming soon</Badge> | Grok 4.1 Fast. |
-| `deepseek-r1` | <Badge color="orange" shape="pill">Coming soon</Badge> | DeepSeek R1. |
-| `kimi-k2-thinking` | <Badge color="orange" shape="pill">Coming soon</Badge> | Kimi K2 Thinking. |
-| `claude-opus-45` | <Badge color="orange" shape="pill">Coming soon</Badge> | Claude Opus 4.5. |
+The full list of chat model IDs and per-token pricing is loaded live on the [Chat Models](/chat/models) page, fetched directly from [`GET /v1/models`](/chat/models).
 
 ## Video
 
