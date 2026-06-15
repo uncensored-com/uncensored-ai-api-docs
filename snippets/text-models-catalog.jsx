@@ -1,10 +1,13 @@
 export const TextModelsCatalog = () => {
-  const ENDPOINT = "https://api.uncensored.com/api/v1/models";
+  const MODELS_ENDPOINT = "https://api.uncensored.com/api/v1/models";
+  const CATALOG_ENDPOINT = "https://api.uncensored.com/api/v1/catalog";
 
   const COPY_ICON =
     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
   const CHECK_ICON =
     '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  const IMAGE_ICON =
+    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>';
 
   const [models, setModels] = useState([]);
   const [status, setStatus] = useState("loading"); // loading | ready | error
@@ -14,15 +17,30 @@ export const TextModelsCatalog = () => {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(ENDPOINT, { headers: { Accept: "application/json" } })
-      .then((r) => {
+    const toList = (json) => (Array.isArray(json) ? json : (json && json.data) || []);
+
+    Promise.all([
+      // Pricing source (required).
+      fetch(MODELS_ENDPOINT, { headers: { Accept: "application/json" } }).then((r) => {
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();
-      })
-      .then((json) => {
+      }),
+      // Capabilities source (optional — modalities). Tolerate failure.
+      fetch(CATALOG_ENDPOINT, { headers: { Accept: "application/json" } })
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null),
+    ])
+      .then(([modelsJson, catalogJson]) => {
         if (cancelled) return;
-        const list = Array.isArray(json) ? json : json.data || [];
-        setModels(list);
+        const modalitiesById = {};
+        toList(catalogJson).forEach((c) => {
+          if (c && c.id) modalitiesById[c.id] = c.modalities || [];
+        });
+        const merged = toList(modelsJson).map((m) => ({
+          ...m,
+          modalities: modalitiesById[m.id] || [],
+        }));
+        setModels(merged);
         setStatus("ready");
       })
       .catch(() => {
@@ -178,6 +196,34 @@ export const TextModelsCatalog = () => {
     }
     .tmc-copy:hover { opacity: 1; color: var(--tmc-fg); }
     .tmc-copy.copied { color: #16a34a; opacity: 1; }
+    .tmc-tags { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .tmc-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.2;
+      padding: 3px 9px 3px 7px;
+      border-radius: 999px;
+      border: 1px solid var(--tmc-chip-border);
+      background: var(--tmc-chip-bg);
+      color: var(--tmc-muted);
+      cursor: default;
+    }
+    .tmc-tag-icon { display: inline-flex; }
+    .tmc-tag-icon svg { display: block; width: 13px; height: 13px; }
+    .tmc-legend {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 2px 0;
+      font-size: 13px;
+      color: var(--tmc-muted);
+    }
+    .tmc-legend .tmc-tag { cursor: default; }
+    .tmc-legend-text { line-height: 1.4; }
     .tmc-provider { font-size: 13px; color: var(--tmc-muted); margin-top: 6px; }
     .tmc-price { font-size: 13px; color: var(--tmc-muted); white-space: nowrap; text-align: right; }
     .tmc-price b { color: var(--tmc-fg); font-weight: 600; }
@@ -221,6 +267,18 @@ export const TextModelsCatalog = () => {
         </div>
       )}
 
+      {status === "ready" && models.some((m) => Array.isArray(m.modalities) && m.modalities.includes("image")) && (
+        <div className="tmc-legend">
+          <span className="tmc-tag">
+            <span className="tmc-tag-icon" dangerouslySetInnerHTML={{ __html: IMAGE_ICON }} />
+            Accepts images
+          </span>
+          <span className="tmc-legend-text">
+            Can understand images you send in the request, in addition to text. Other models are text-only.
+          </span>
+        </div>
+      )}
+
       {status === "loading" && <div className="tmc-msg">Loading models…</div>}
       {status === "error" && (
         <div className="tmc-msg">
@@ -250,6 +308,17 @@ export const TextModelsCatalog = () => {
                         __html: copiedId === m.id ? CHECK_ICON : COPY_ICON,
                       }}
                     />
+                  </span>
+                  <span className="tmc-tags">
+                    {Array.isArray(m.modalities) && m.modalities.includes("image") && (
+                      <span className="tmc-tag">
+                        <span
+                          className="tmc-tag-icon"
+                          dangerouslySetInnerHTML={{ __html: IMAGE_ICON }}
+                        />
+                        Accepts images
+                      </span>
+                    )}
                   </span>
                   {m.owned_by && <div className="tmc-provider">{m.owned_by}</div>}
                 </div>
