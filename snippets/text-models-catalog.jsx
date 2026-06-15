@@ -60,60 +60,107 @@ export const TextModelsCatalog = () => {
   });
 
   const css = `
-    .tmc-wrap { margin-top: 1rem; }
+    .tmc-wrap {
+      /* Neutral / monochrome — no brand accent, matches the docs UI */
+      /* Light theme: neutral overlays that sit on the page surface */
+      --tmc-fg: #1a1a1a;
+      --tmc-muted: #6b7280;
+      --tmc-field-bg: rgba(0,0,0,0.015);
+      --tmc-field-border: rgba(0,0,0,0.12);
+      --tmc-field-border-hover: rgba(0,0,0,0.28);
+      --tmc-focus-ring: rgba(0,0,0,0.08);
+      --tmc-code-bg: rgba(0,0,0,0.05);
+      --tmc-row-border: rgba(0,0,0,0.08);
+      --tmc-chip-bg: rgba(0,0,0,0.03);
+      --tmc-chip-border: rgba(0,0,0,0.12);
+      --tmc-chip-hover: rgba(0,0,0,0.06);
+      --tmc-active-bg: #1a1a1a;
+      --tmc-active-fg: #ffffff;
+      margin-top: 1rem;
+    }
+    :is(.dark) .tmc-wrap {
+      --tmc-fg: #f3f4f6;
+      --tmc-muted: #9ca3af;
+      --tmc-field-bg: rgba(255,255,255,0.04);
+      --tmc-field-border: rgba(255,255,255,0.14);
+      --tmc-field-border-hover: rgba(255,255,255,0.34);
+      --tmc-focus-ring: rgba(255,255,255,0.1);
+      --tmc-code-bg: rgba(255,255,255,0.07);
+      --tmc-row-border: rgba(255,255,255,0.09);
+      --tmc-chip-bg: rgba(255,255,255,0.05);
+      --tmc-chip-border: rgba(255,255,255,0.14);
+      --tmc-chip-hover: rgba(255,255,255,0.09);
+      --tmc-active-bg: #f3f4f6;
+      --tmc-active-fg: #111111;
+    }
+
+    .tmc-search-box { position: relative; display: flex; align-items: center; }
+    .tmc-search-box svg {
+      position: absolute;
+      left: 16px;
+      width: 18px;
+      height: 18px;
+      color: var(--tmc-muted);
+      pointer-events: none;
+    }
     .tmc-search {
       width: 100%;
       box-sizing: border-box;
-      padding: 14px 16px;
+      padding: 13px 16px 13px 44px;
       font-size: 15px;
-      color: var(--text, inherit);
-      background: var(--gray-50, rgba(255,255,255,0.02));
-      border: 1px solid var(--gray-200, rgba(255,255,255,0.1));
+      color: var(--tmc-fg);
+      background: var(--tmc-field-bg);
+      border: 1px solid var(--tmc-field-border);
       border-radius: 12px;
       outline: none;
-      transition: border-color 0.12s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      transition: border-color 0.12s ease, box-shadow 0.12s ease;
     }
-    .tmc-search:focus { border-color: var(--primary, #ff3b00); }
-    .tmc-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }
+    .tmc-search::placeholder { color: var(--tmc-muted); }
+    .tmc-search:hover { border-color: var(--tmc-field-border-hover); }
+    .tmc-search:focus {
+      border-color: var(--tmc-field-border-hover);
+      box-shadow: 0 0 0 3px var(--tmc-focus-ring);
+    }
+
+    .tmc-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 6px; }
     .tmc-chip {
       padding: 6px 14px;
       font-size: 13px;
+      font-weight: 500;
       line-height: 1.2;
       border-radius: 999px;
-      border: 1px solid var(--gray-200, rgba(255,255,255,0.12));
-      background: transparent;
-      color: var(--gray-500, #9ca3af);
+      border: 1px solid var(--tmc-chip-border);
+      background: var(--tmc-chip-bg);
+      color: var(--tmc-muted);
       cursor: pointer;
       transition: all 0.12s ease;
     }
-    .tmc-chip:hover { color: var(--text, inherit); border-color: var(--gray-300, rgba(255,255,255,0.25)); }
+    .tmc-chip:hover { color: var(--tmc-fg); background: var(--tmc-chip-hover); border-color: var(--tmc-field-border-hover); }
     .tmc-chip.active {
-      color: #fff;
-      background: var(--primary, #ff3b00);
-      border-color: var(--primary, #ff3b00);
+      color: var(--tmc-active-fg);
+      background: var(--tmc-active-bg);
+      border-color: var(--tmc-active-bg);
     }
-    .tmc-count { font-size: 13px; color: var(--gray-500, #9ca3af); margin: 10px 2px 14px; }
+
+    .tmc-count { font-size: 13px; color: var(--tmc-muted); margin: 12px 2px 6px; }
     .tmc-card {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
       padding: 16px 4px;
-      border-bottom: 1px solid var(--gray-200, rgba(255,255,255,0.08));
+      border-bottom: 1px solid var(--tmc-row-border);
     }
     .tmc-card-main { min-width: 0; }
-    .tmc-id {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .tmc-id { display: inline-flex; align-items: center; gap: 8px; }
     .tmc-id code {
       font-size: 15px;
       font-weight: 600;
       padding: 3px 8px;
       border-radius: 6px;
-      background: var(--gray-100, rgba(255,255,255,0.06));
-      color: var(--text, inherit);
+      background: var(--tmc-code-bg);
+      color: var(--tmc-fg);
       word-break: break-all;
     }
     .tmc-copy {
@@ -121,20 +168,20 @@ export const TextModelsCatalog = () => {
       align-items: center;
       justify-content: center;
       padding: 3px;
-      color: var(--gray-400, #9ca3af);
+      color: var(--tmc-muted);
       background: transparent;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      opacity: 0.6;
+      opacity: 0.7;
       transition: opacity 0.12s ease, color 0.12s ease;
     }
-    .tmc-copy:hover { opacity: 1; color: var(--primary, #ff3b00); }
+    .tmc-copy:hover { opacity: 1; color: var(--tmc-fg); }
     .tmc-copy.copied { color: #16a34a; opacity: 1; }
-    .tmc-provider { font-size: 13px; color: var(--gray-500, #9ca3af); margin-top: 6px; }
-    .tmc-price { font-size: 13px; color: var(--gray-500, #9ca3af); white-space: nowrap; text-align: right; }
-    .tmc-price b { color: var(--text, inherit); font-weight: 600; }
-    .tmc-msg { padding: 24px 4px; font-size: 14px; color: var(--gray-500, #9ca3af); }
+    .tmc-provider { font-size: 13px; color: var(--tmc-muted); margin-top: 6px; }
+    .tmc-price { font-size: 13px; color: var(--tmc-muted); white-space: nowrap; text-align: right; }
+    .tmc-price b { color: var(--tmc-fg); font-weight: 600; }
+    .tmc-msg { padding: 24px 4px; font-size: 14px; color: var(--tmc-muted); }
     @media (max-width: 520px) {
       .tmc-card { flex-direction: column; align-items: flex-start; gap: 8px; }
       .tmc-price { text-align: left; }
@@ -145,13 +192,19 @@ export const TextModelsCatalog = () => {
     <div className="tmc-wrap">
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
-      <input
-        className="tmc-search"
-        type="text"
-        placeholder="Search models…"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
+      <div className="tmc-search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          className="tmc-search"
+          type="text"
+          placeholder="Search models…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </div>
 
       {status === "ready" && (
         <div className="tmc-chips">
