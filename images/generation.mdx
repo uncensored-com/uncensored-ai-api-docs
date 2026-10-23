@@ -9,7 +9,7 @@ description: "Generate images from text prompts."
 POST /v1/images/generations
 ```
 
-Generate an image from a text prompt. The endpoint can return synchronously or queue work for async delivery when a `callback_url` is supplied.
+Generate an image from a text prompt. The endpoint is always async: it returns `202` with a `job_id`. Poll the `status_url` for the result, or supply a `callback_url` for webhook delivery.
 
 ## Request body
 
@@ -43,19 +43,7 @@ curl --request POST "https://api.uncensored.com/api/v1/images/generations" \
   }'
 ```
 
-## Sync response
-
-```json
-{
-  "job_id": "550e8400-e29b-41d4-a716-446655440000",
-  "status": "completed",
-  "url": "https://media.lesscensored.com/images/550e8400.jpg",
-  "generation_time": 2.5,
-  "model": "model-pro"
-}
-```
-
-## Async request
+## Request with webhook delivery
 
 ```json
 {
@@ -67,7 +55,9 @@ curl --request POST "https://api.uncensored.com/api/v1/images/generations" \
 }
 ```
 
-## Async response
+## Response
+
+Without a `callback_url`, `webhook_url` is `null`.
 
 ```json
 {
@@ -103,8 +93,7 @@ Poll every 2-5 seconds. Image generation typically takes 5-30 seconds.
 
 | Status code | Description |
 | --- | --- |
-| `200` | Image generated successfully in sync mode. |
-| `202` | Job accepted and queued for async mode. |
+| `202` | Job accepted and queued. |
 | `400` | Invalid request parameters. |
 | `402` | Insufficient funds. |
 | `403` | Content moderation failed, or scope does not permit this model. |

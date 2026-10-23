@@ -17,7 +17,7 @@ API keys can be created and managed through the [Developer Dashboard](https://un
 
 | Header | Required | Description |
 | --- | --- | --- |
-| `x-api-key: <key>` | Yes | API key authentication. |
+| `x-api-key: <key>` | Yes | API key authentication. `Authorization: Bearer <key>` is also accepted. |
 | `Content-Type: application/json` | Yes, on JSON requests | Standard JSON request body. |
 | `Idempotency-Key: <string>` | No | Safely retry write requests without duplicate jobs or charges. |
 
