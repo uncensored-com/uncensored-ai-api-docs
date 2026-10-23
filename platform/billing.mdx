@@ -1,9 +1,7 @@
 ---
 title: "Billing"
-description: "Check balances, estimate costs, view transactions, and set spend limits."
+description: "Check your Uncensored AI API balance, estimate a request's cost before sending it, page through transactions and set daily or monthly spend limits."
 ---
-
-# Billing
 
 Billing endpoints let developers check balance, estimate cost, view transactions, and set spend limits.
 
@@ -28,3 +26,33 @@ Billing endpoints let developers check balance, estimate cost, view transactions
 
 All `*_nanos` fields are authoritative. `*_usd` fields are rounded for display. 1 USD = 1,000,000,000 nanos.
 
+## Estimate cost
+
+```bash
+curl --request POST "https://api.uncensored.com/api/v1/billing/estimate" \
+  --header "Content-Type: application/json" \
+  --data '{"feature_id": "video-gen", "model_key": "wan-2.2-ultra-fast", "duration_seconds": 8, "resolution": "720p"}'
+```
+
+```json
+{ "estimated_cost_usd": 0.96, "feature_id": "video-gen", "model_key": "wan-2.2-ultra-fast" }
+```
+
+No API key is required.
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `feature_id` | Yes | `chat`, `image-gen`, `image-studio`, `video-gen`, `video-studio`, or `video-interpretation`. Dotted forms such as `image.gen` are also accepted. |
+| `model_key` | Yes | Model ID. |
+| `duration_seconds` | No | Video length in seconds. Note the name: the generation endpoint's `seconds` field is ignored here. Omitted, the model's default length is priced. |
+| `resolution` | No | Resolution for models priced by resolution, such as `720p`. |
+| `quality` | No | Quality tier for quality-priced image models. |
+| `count` | No | Number of items. Default `1`. |
+| `input_tokens`, `output_tokens` | No | Token counts for `chat`. |
+| `generate_audio` | No | Audio-on pricing for audio-capable video models. |
+
+For models with a fallback chain, the estimate is the highest price in the chain, which is also the amount held on your balance. The actual charge is never higher than the estimate.
+
+## Transactions
+
+`GET /v1/billing/transactions` accepts `limit` (1-100, default 20; larger values return `422`), `starting_after` (a transaction `id`, for the next page) and `type` (`hold`, `hold_capture`, `hold_release`, `top_up`, `refund` or `adjustment`; `usage` is accepted as another name for `hold_capture`; repeat it to filter on several, as in `?type=hold&type=hold_capture`). Each transaction's `request_id` is the `job_id` of the request it belongs to.

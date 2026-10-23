@@ -1,0 +1,47 @@
+# Uncensored AI
+
+> Uncensored AI Developers API: uncensored image generation, image editing, text-to-video, image-to-video and OpenAI-compatible chat through one REST API.
+
+- Base URL: `https://api.uncensored.com/api` (endpoint paths such as `/v1/images/generations` are relative to it).
+- Auth: send your API key in the `x-api-key` header (`Authorization: Bearer <key>` also works).
+- Image and video generation are async: they return `202` with a `job_id` and a `status_url` to poll, or deliver to a `callback_url`.
+- Chat is OpenAI-compatible: use the OpenAI SDK with the base URL above.
+- Price a request before sending it with `POST /v1/billing/estimate` (no key required).
+
+## Getting started
+
+- [Uncensored AI Developers API](https://docs.uncensored.com/introduction.md): Uncensored AI Developers API: uncensored image generation, image editing, text-to-video, image-to-video and OpenAI-compatible chat through one REST API.
+- [Authentication](https://docs.uncensored.com/authentication.md): Authenticate Uncensored AI API requests with an API key in the x-api-key header or as a Bearer token, plus required headers and idempotency keys.
+- [Models](https://docs.uncensored.com/models.md): Catalog of every Uncensored AI API model: image generation, image editing, video and chat model IDs with required parameters, pricing and typical speed.
+
+## Images
+
+- [Generate Image](https://docs.uncensored.com/images/generation.md): Generate uncensored images from text prompts with POST /v1/images/generations: request parameters, async jobs, polling, webhooks and 20+ image models.
+- [Image Studio — Edit](https://docs.uncensored.com/images/studio.md): Edit images with a text instruction and reference images using POST /v1/images/studio/edit: edit models, async jobs, polling and fallback behaviour.
+- [Image Models](https://docs.uncensored.com/images/models.md): Live Uncensored AI image generation models, including Flux, Seedream, Nano Banana, GPT Image, Wan and Lustify, with parameters and price per image.
+
+## Video
+
+- [Video](https://docs.uncensored.com/video/overview.md): Uncensored AI video API: text-to-video, image-to-video, video-to-video, video editing and extension with Seedance, Wan, Sora, Grok Imagine and more.
+- [Video Generation](https://docs.uncensored.com/video/generation.md): Generate videos from text, images or clips with POST /v1/videos/generations: 40+ live models, per-second pricing, job polling and webhook delivery.
+
+## Chat
+
+- [Chat](https://docs.uncensored.com/chat/overview.md): OpenAI-compatible uncensored chat API: keep using the OpenAI SDK, swap in the Uncensored AI base URL and choose from 100+ chat models.
+- [Chat Completions](https://docs.uncensored.com/chat/completions.md): POST /v1/chat/completions: OpenAI-compatible uncensored chat completions with streaming, request parameters, examples and the response format.
+- [Chat Models](https://docs.uncensored.com/chat/models.md): Live catalog of 100+ uncensored and open-weight chat models on the Uncensored AI API, with model IDs, model makers and per-million-token pricing.
+
+## Platform
+
+- [API Keys](https://docs.uncensored.com/platform/api-keys.md): Create, list, revoke, reactivate and rotate Uncensored AI API keys, and restrict each key with scopes. Endpoint reference for API key management.
+- [Billing](https://docs.uncensored.com/platform/billing.md): Check your Uncensored AI API balance, estimate a request's cost before sending it, page through transactions and set daily or monthly spend limits.
+- [Webhooks](https://docs.uncensored.com/platform/webhooks.md): Receive Uncensored AI async job results at your callback_url: the webhook payload format and best practices for image and video generation callbacks.
+- [Rate Limits](https://docs.uncensored.com/rate-limits.md): Uncensored AI API rate limits by tier: requests per minute, burst and concurrent job limits, automatic tier upgrades, rate limit headers and retries.
+- [Error Codes](https://docs.uncensored.com/error-codes.md): Uncensored AI API error codes and HTTP status codes, the JSON error envelope, and how to handle authentication, billing, moderation and rate limit errors.
+- [Support](https://docs.uncensored.com/support.md): Get help with the Uncensored AI API: join the developer Discord, report bugs and issues, and get in touch with the Uncensored AI team.
+
+## Optional
+
+- [Audio](https://docs.uncensored.com/audio/overview.md): Audio APIs are coming soon to the Uncensored AI API: text-to-speech, speech-to-text and music generation. Join the Discord to hear when they launch.
+- [Tools](https://docs.uncensored.com/tools/overview.md): Utility APIs for the Uncensored AI platform, starting with prompt enhancement, are coming soon. See planned endpoints and get launch updates on Discord.
+- [Embeddings](https://docs.uncensored.com/embeddings/overview.md): Text embedding APIs for semantic search, clustering and RAG are coming soon to the Uncensored AI API. Join the Discord to hear when they launch.

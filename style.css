@@ -1,0 +1,72 @@
+/* Dark surfaces and hairlines from the app's API dashboard
+   (c-u-shared: components/creation-desktop/desktopColorTokens.ts). */
+.dark {
+  --uc-surface-card: #161616;
+  --uc-surface-input: #0c0c0c;
+  --uc-border-card: rgba(255, 255, 255, 0.08);
+  --uc-border-hover: rgba(255, 255, 255, 0.12);
+  --uc-text-secondary: rgba(255, 255, 255, 0.65);
+}
+
+/* Sidebar: small uppercase group labels and pages on a thin rail, with the
+   current page marked by an accent bar. */
+#sidebar .sidebar-group-header {
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(14, 14, 14, 0.45);
+}
+
+.dark #sidebar .sidebar-group-header {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+#sidebar .sidebar-group {
+  margin-left: 1rem;
+  margin-bottom: 18px;
+  border-left: 1px solid rgba(14, 14, 14, 0.1);
+}
+
+.dark #sidebar .sidebar-group {
+  border-left-color: var(--uc-border-card);
+}
+
+#sidebar .sidebar-group a {
+  margin-left: -1px;
+  padding: 5px 12px !important;
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  background: transparent !important;
+  font-size: 13px;
+  text-shadow: none !important;
+}
+
+#sidebar .sidebar-group a:hover {
+  border-left-color: rgba(14, 14, 14, 0.25);
+}
+
+.dark #sidebar .sidebar-group a:hover {
+  border-left-color: var(--uc-border-hover);
+}
+
+#sidebar .sidebar-group a[aria-current="page"] {
+  border-left-color: currentColor;
+  font-weight: 600;
+}
+
+/* Code blocks and tables sit on dashboard card surfaces. */
+.dark .code-block {
+  background-color: var(--uc-surface-input);
+  border-color: var(--uc-border-card);
+}
+
+.dark #content-area table {
+  background-color: var(--uc-surface-card);
+}
+
+.dark #content-area th,
+.dark #content-area td {
+  border-color: var(--uc-border-card);
+}

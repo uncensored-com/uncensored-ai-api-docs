@@ -2,8 +2,29 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Uncensored AI",
+  "description": "Uncensored AI Developers API documentation: uncensored image generation, image editing, video generation and OpenAI-compatible chat via one REST API.",
   "colors": {
-    "primary": "#ff3b00"
+    "primary": "#2f7df6",
+    "light": "#79a9f7",
+    "dark": "#226ce0"
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://uncensored.com"
+  },
+  "favicon": "/favicon.png",
+  "appearance": {
+    "default": "dark"
+  },
+  "background": {
+    "color": {
+      "light": "#ffffff",
+      "dark": "#0e0e0e"
+    }
+  },
+  "fonts": {
+    "family": "Inter"
   },
   "navigation": {
     "tabs": [
@@ -11,33 +32,23 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "Introduction",
+            "group": "Getting started",
             "pages": [
               "introduction",
-              "authentication"
-            ]
-          },
-          {
-            "group": "Models",
-            "pages": [
+              "authentication",
               "models"
             ]
           },
           {
-            "group": "Image Generation",
+            "group": "Images",
             "pages": [
               "images/generation",
+              "images/studio",
               "images/models"
             ]
           },
           {
-            "group": "Image Studio - Edit",
-            "pages": [
-              "images/studio"
-            ]
-          },
-          {
-            "group": "Video Studio",
+            "group": "Video",
             "pages": [
               "video/overview",
               "video/generation"
@@ -52,33 +63,11 @@
             ]
           },
           {
-            "group": "Audio",
+            "group": "More APIs",
             "pages": [
-              "audio/overview"
-            ]
-          },
-          {
-            "group": "Tools",
-            "pages": [
-              "tools/overview"
-            ]
-          },
-          {
-            "group": "Embeddings",
-            "pages": [
+              "audio/overview",
+              "tools/overview",
               "embeddings/overview"
-            ]
-          },
-          {
-            "group": "Rate Limits",
-            "pages": [
-              "rate-limits"
-            ]
-          },
-          {
-            "group": "Error Codes",
-            "pages": [
-              "error-codes"
             ]
           },
           {
@@ -86,17 +75,31 @@
             "pages": [
               "platform/api-keys",
               "platform/billing",
-              "platform/webhooks"
-            ]
-          },
-          {
-            "group": "Support",
-            "pages": [
+              "platform/webhooks",
+              "rate-limits",
+              "error-codes",
               "support"
             ]
           }
         ]
       }
     ]
-  }
+  },
+  "redirects": [
+    {
+      "source": "/getting-started",
+      "destination": "/introduction",
+      "permanent": true
+    },
+    {
+      "source": "/api-reference",
+      "destination": "/introduction",
+      "permanent": true
+    },
+    {
+      "source": "/changelog",
+      "destination": "/introduction",
+      "permanent": true
+    }
+  ]
 }

@@ -1,13 +1,14 @@
 ---
 title: "Image Studio — Edit"
-description: "Edit existing images with a text prompt and reference image(s)."
+sidebarTitle: "Edit"
+description: "Edit images with a text instruction and reference images using POST /v1/images/studio/edit: edit models, async jobs, polling and fallback behaviour."
 ---
 
 import { ModelCards } from '/snippets/model-cards.jsx';
 
 <ModelCards />
 
-# Image Studio — Edit <Badge color="green" shape="pill">Live</Badge>
+<Badge color="green" shape="pill">Live</Badge>
 
 ```text
 POST /v1/images/studio/edit
@@ -41,7 +42,7 @@ Default model: `standard`. The API can default `model` when omitted, but product
 | `Wan-2.6` | Wan 2.6 | `prompt`, `image_urls`, `model` | common + `seed`, `negative_prompt`; `image_urls` 1-5 | `$0.10` | ~20s |
 | `Wan-2.6-image-edit` | Wan 2.6 Image Edit | `prompt`, `image_urls`, `model` | common + `seed`, `negative_prompt`; `image_urls` 1-5 | `$0.10` | ~15s |
 | `group-edit` | Qwen Group Photo | `prompt`, `image_urls`, `model` | common + `seed`; `image_urls` 1-5 | `$0.10` | ~20s |
-| `xai/grok-imagine-image/edit` | Grok Imagine Edit | `prompt`, `image_urls`, `model` | common + `seed`; provider uses the first image | `$0.10` | ~15s |
+| `xai/grok-imagine-image/edit` | Grok Imagine Edit | `prompt`, `image_urls`, `model` | common + `seed`; only the first image is used | `$0.10` | ~15s |
 | `seedream-v5` | Seedream v5 Lite | `prompt`, `image_urls`, `model` | common; `image_urls` 1-5 | `$0.10` | ~15s |
 | `nano-banana-2/edit` | Nano Banana 2 Edit | `prompt`, `image_urls`, `model` | common + `resolution` (`0.5k`, `1k`, `2k`, `4k`), `aspect_ratio`, `output_format` (`png`, `jpeg`), `enable_web_search`, `enable_image_search`; `image_urls` 1-5 | `0.5k/1k/2k $0.10`, `4k $0.20` | ~20s |
 | `nano-banana-2/edit-fast` | Nano Banana 2 Edit Fast | `prompt`, `image_urls`, `model` | common + `resolution` (`2k`, `4k`), `aspect_ratio`, `output_format` (`png`, `jpeg`); `image_urls` 1-5 | `$0.10` | ~12s |

@@ -1,15 +1,16 @@
 ---
 title: "Image Models"
-description: "Live image generation model IDs."
+sidebarTitle: "Models"
+description: "Live Uncensored AI image generation models, including Flux, Seedream, Nano Banana, GPT Image, Wan and Lustify, with parameters and price per image."
 ---
 
 import { ModelCards } from '/snippets/model-cards.jsx';
 
 <ModelCards />
 
-# Image Models <Badge color="green" shape="pill">Live</Badge>
+<Badge color="green" shape="pill">Live</Badge>
 
-Default model: `model-dev`. The API can default `model` when omitted, but production integrations should send it explicitly so the selected provider is clear.
+Default model: `model-dev`. The API can default `model` when omitted, but production integrations should send it explicitly so the selected model is clear.
 
 `common` means `image_width`, `image_height`, `callback_url`, `resolution`, `quality`, `additional_settings`, and `enable_fallback`. Model-specific knobs such as `seed`, `negative_prompt`, `aspect_ratio`, `num_inference_steps`, `guidance_scale`, and `output_format` are passed in `additional_settings` unless they are documented as top-level convenience params.
 
@@ -34,9 +35,9 @@ Default model: `model-dev`. The API can default `model` when omitted, but produc
 | `nano-banana-pro` | Nano Banana Pro | `prompt`, `model` | common + `seed`, `aspect_ratio`, `resolution`, `output_format` | `$0.20` | ~20s |
 | `nano-banana` | Nano Banana | `prompt`, `model` | common + `seed`, `aspect_ratio`, `resolution`, `output_format`, `enable_web_search`, `enable_image_search` | `$0.10` | ~15s |
 | `gpt-image` | GPT Image | `prompt`, `model` | common + `seed`, `aspect_ratio`, `resolution`, `quality`, `output_format` | `medium $0.10`, `default/high $0.20` | ~20s |
-| `realism` | Realism | `prompt`, `model` | common + `negative_prompt`; dimensions accepted but provider ignores exact sizing | `$0.10` | ~20s |
-| `realism-2` | Realism 2.0 | `prompt`, `model` | common + `negative_prompt`; dimensions accepted but provider ignores exact sizing | `$0.20` | ~20s |
-| `z-image-turbo` | Z Image Turbo | `prompt`, `model` | common + `negative_prompt`; dimensions accepted but provider ignores exact sizing | `$0.20` | ~20s |
+| `realism` | Realism | `prompt`, `model` | common + `negative_prompt`; dimensions accepted but the model ignores exact sizing | `$0.10` | ~20s |
+| `realism-2` | Realism 2.0 | `prompt`, `model` | common + `negative_prompt`; dimensions accepted but the model ignores exact sizing | `$0.20` | ~20s |
+| `z-image-turbo` | Z Image Turbo | `prompt`, `model` | common + `negative_prompt`; dimensions accepted but the model ignores exact sizing | `$0.20` | ~20s |
 | `z-image-uncensored` | Z Image Uncensored | `prompt`, `model` | common + `seed`, `prompt_extend`; dimensions 256-1,536 px (default 1,024×1,536) | `$0.10` | ~20s |
 
 ## Deprecated models
