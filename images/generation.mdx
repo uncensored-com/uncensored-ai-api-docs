@@ -18,11 +18,11 @@ Generate an image from a text prompt. The endpoint is always async: it returns `
 | --- | --- | --- | --- |
 | `prompt` | string | Yes | Text prompt describing the image. 1-2,000 characters after trimming; cannot be empty. |
 | `model` | string | Yes | Image model to use. The API defaults to `model-dev` if omitted, but integrations should send this explicitly. See [Image Models](/images/models). |
-| `image_width` | integer | No | Width in pixels. Schema accepts 256-2,048. Some providers clamp or map dimensions internally. Default: `1024`. |
-| `image_height` | integer | No | Height in pixels. Schema accepts 256-2,048. Some providers clamp or map dimensions internally. Default: `1024`. |
+| `image_width` | integer | No | Width in pixels. Schema accepts 256-2,048. Some models clamp or map dimensions internally. Default: `1024`. |
+| `image_height` | integer | No | Height in pixels. Schema accepts 256-2,048. Some models clamp or map dimensions internally. Default: `1024`. |
 | `callback_url` | string | No | Webhook URL for async delivery. |
-| `resolution` | string | No | Top-level convenience param for variable-size models. Also passed to provider settings. |
-| `quality` | string | No | Top-level convenience param for quality-priced models. Also passed to provider settings. |
+| `resolution` | string | No | Top-level convenience param for variable-size models. Also passed to the model's settings. |
+| `quality` | string | No | Top-level convenience param for quality-priced models. Also passed to the model's settings. |
 | `additional_settings` | object | No | Model-specific settings such as `seed`, `aspect_ratio`, `negative_prompt`, `num_inference_steps`, `guidance_scale`, `output_format`, `enable_web_search`, and `enable_image_search`. |
 | `enable_fallback` | boolean | No | Defaults to `true`. Image generation models currently have no fallback configured. |
 

@@ -29,7 +29,7 @@
 
 - [Chat](https://docs.uncensored.com/chat/overview.md): OpenAI-compatible uncensored chat API: keep using the OpenAI SDK, swap in the Uncensored AI base URL and choose from 100+ chat models.
 - [Chat Completions](https://docs.uncensored.com/chat/completions.md): POST /v1/chat/completions: OpenAI-compatible uncensored chat completions with streaming, request parameters, examples and the response format.
-- [Chat Models](https://docs.uncensored.com/chat/models.md): Live catalog of 100+ uncensored and open-weight chat models on the Uncensored AI API, with model IDs, providers and per-million-token pricing.
+- [Chat Models](https://docs.uncensored.com/chat/models.md): Live catalog of 100+ uncensored and open-weight chat models on the Uncensored AI API, with model IDs, model makers and per-million-token pricing.
 
 ## Platform
 
