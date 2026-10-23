@@ -3,7 +3,27 @@
   "theme": "mint",
   "name": "Uncensored AI",
   "colors": {
-    "primary": "#ff3b00"
+    "primary": "#2f7df6",
+    "light": "#79a9f7",
+    "dark": "#226ce0"
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://uncensored.com"
+  },
+  "favicon": "/favicon.png",
+  "appearance": {
+    "default": "dark"
+  },
+  "background": {
+    "color": {
+      "light": "#ffffff",
+      "dark": "#0e0e0e"
+    }
+  },
+  "fonts": {
+    "family": "Inter"
   },
   "navigation": {
     "tabs": [

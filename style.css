@@ -1,0 +1,24 @@
+/* Dark surfaces and hairlines from the app's API dashboard
+   (c-u-shared: components/creation-desktop/desktopColorTokens.ts). */
+.dark {
+  --uc-surface-card: #161616;
+  --uc-surface-input: #0c0c0c;
+  --uc-border-card: rgba(255, 255, 255, 0.08);
+  --uc-border-hover: rgba(255, 255, 255, 0.12);
+  --uc-text-secondary: rgba(255, 255, 255, 0.65);
+}
+
+/* Code blocks and tables sit on dashboard card surfaces. */
+.dark .code-block {
+  background-color: var(--uc-surface-input);
+  border-color: var(--uc-border-card);
+}
+
+.dark #content-area table {
+  background-color: var(--uc-surface-card);
+}
+
+.dark #content-area th,
+.dark #content-area td {
+  border-color: var(--uc-border-card);
+}
