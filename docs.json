@@ -31,33 +31,23 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "Introduction",
+            "group": "Getting started",
             "pages": [
               "introduction",
-              "authentication"
-            ]
-          },
-          {
-            "group": "Models",
-            "pages": [
+              "authentication",
               "models"
             ]
           },
           {
-            "group": "Image Generation",
+            "group": "Images",
             "pages": [
               "images/generation",
+              "images/studio",
               "images/models"
             ]
           },
           {
-            "group": "Image Studio - Edit",
-            "pages": [
-              "images/studio"
-            ]
-          },
-          {
-            "group": "Video Studio",
+            "group": "Video",
             "pages": [
               "video/overview",
               "video/generation"
@@ -72,33 +62,11 @@
             ]
           },
           {
-            "group": "Audio",
+            "group": "More APIs",
             "pages": [
-              "audio/overview"
-            ]
-          },
-          {
-            "group": "Tools",
-            "pages": [
-              "tools/overview"
-            ]
-          },
-          {
-            "group": "Embeddings",
-            "pages": [
+              "audio/overview",
+              "tools/overview",
               "embeddings/overview"
-            ]
-          },
-          {
-            "group": "Rate Limits",
-            "pages": [
-              "rate-limits"
-            ]
-          },
-          {
-            "group": "Error Codes",
-            "pages": [
-              "error-codes"
             ]
           },
           {
@@ -106,12 +74,9 @@
             "pages": [
               "platform/api-keys",
               "platform/billing",
-              "platform/webhooks"
-            ]
-          },
-          {
-            "group": "Support",
-            "pages": [
+              "platform/webhooks",
+              "rate-limits",
+              "error-codes",
               "support"
             ]
           }
