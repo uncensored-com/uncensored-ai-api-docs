@@ -21,6 +21,59 @@ A single catalog of model IDs across the API. Use the `Category` column to filte
 | Video | `POST /v1/videos/...` | <Badge color="green" shape="pill">Live</Badge> |
 | Audio | `POST /v1/audio/...` | <Badge color="orange" shape="pill">Coming soon</Badge> |
 
+## Listing models programmatically — `GET /v1/models?type=`
+
+Every category below is also published as JSON. `GET /v1/models` is public (no API key) and takes an optional `type` query parameter with the same vocabulary Venice uses, so a client or marketplace crawler written for Venice's `/models?type=` can read this API unchanged:
+
+| `type` | Returns | Pricing published |
+| --- | --- | --- |
+| `text` (default) | Chat models, OpenAI-compatible shape | `pricing` per token (existing) **+** `model_spec.pricing.{input, output, cache_read, cache_write}` in USD per 1M tokens |
+| `image` | Text-to-image models | `model_spec.pricing.generation.usd` per image, or `resolutions.{1K, 2K, 4K}.usd` / `quality.{res}.{low, medium, high}.usd` tiers |
+| `inpaint` | Image Studio (edit) models | `model_spec.pricing.inpaint.usd`, same tier keys |
+| `video` | Text-, image- and video-to-video models | `model_spec.pricing.per_second.{480p, 720p, 1080p, 4k}.usd` (or `per_job`, `per_megapixel`), `default` = price when no resolution is sent, `per_second_with_audio` where audio is a separate tier |
+| `all` | Everything above in one list | — |
+
+```bash
+curl "https://api.uncensored.com/api/v1/models?type=video"
+```
+
+Every non-text row looks like this (Seedance 2.5 Spicy shown):
+
+```json
+{
+  "id": "seedance-2.5-spicy",
+  "object": "model",
+  "created": 0,
+  "owned_by": "uncensored",
+  "type": "video",
+  "model_spec": {
+    "name": "Seedance 2.5 Spicy I2V",
+    "offline": false,
+    "traits": ["uncensored"],
+    "model_sets": ["image-to-video", "audio", "high_resolution"],
+    "pricing": {
+      "unit": "per_second",
+      "default": { "usd": 0.54 },
+      "default_resolution": "480p",
+      "per_second": { "480p": { "usd": 0.54 }, "720p": { "usd": 1.08 }, "1080p": { "usd": 1.62 }, "4k": { "usd": 3.24 } }
+    },
+    "constraints": {
+      "model_type": "image-to-video",
+      "resolutions": ["480p", "720p", "1080p", "4k"],
+      "durations": ["4s", "5s", "6s", "…", "30s"],
+      "aspect_ratios": [],
+      "audio": true,
+      "image_input": true,
+      "video_input": false,
+      "default_resolution": "480p",
+      "default_duration": "5s"
+    }
+  }
+}
+```
+
+Image rows carry `aspectRatios`, `resolutions`, `qualities`, `minDimension` / `maxDimension` in `constraints`; Image Studio rows carry `combineImages` (multi-image input) and `async`. Prices are the amounts the API bills, the same figures `POST /v1/billing/estimate` returns. A row with `"pricing": {}` means no price is published for it — never assume `$0`. Unknown `type` values return `400`.
+
 ## Image Generation
 
 Default model: `model-dev`. Endpoint: [`POST /v1/images/generations`](/images/generation).
