@@ -3,6 +3,7 @@
   "theme": "mint",
   "name": "Uncensored AI",
   "description": "Uncensored AI Developers API documentation: uncensored image generation, image editing, video generation and OpenAI-compatible chat via one REST API.",
+  "favicon": "/favicon.ico",
   "colors": {
     "primary": "#2f7df6",
     "light": "#79a9f7",
@@ -13,7 +14,6 @@
     "dark": "/logo/dark.svg",
     "href": "https://uncensored.com"
   },
-  "favicon": "/favicon.png",
   "appearance": {
     "default": "dark"
   },
