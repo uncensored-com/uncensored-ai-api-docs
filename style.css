@@ -1,5 +1,4 @@
-/* Dark surfaces and hairlines from the app's API dashboard
-   (c-u-shared: components/creation-desktop/desktopColorTokens.ts). */
+/* Dark surfaces and hairlines matching the app's API dashboard. */
 .dark {
   --uc-surface-card: #161616;
   --uc-surface-input: #0c0c0c;

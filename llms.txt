@@ -7,6 +7,7 @@
 - Image and video generation are async: they return `202` with a `job_id` and a `status_url` to poll, or deliver to a `callback_url`.
 - Chat is OpenAI-compatible: use the OpenAI SDK with the base URL above.
 - Price a request before sending it with `POST /v1/billing/estimate` (no key required).
+- List models and their prices as JSON with `GET /v1/models?type=text|image|inpaint|video|all` (no key required).
 
 ## Getting started
 

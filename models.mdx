@@ -22,7 +22,7 @@ A single catalog of model IDs across the API. Use the `Category` column to filte
 
 ## Listing models programmatically — `GET /v1/models?type=`
 
-Every category below is also published as JSON. `GET /v1/models` is public (no API key) and takes an optional `type` query parameter with the same vocabulary Venice uses, so a client or marketplace crawler written for Venice's `/models?type=` can read this API unchanged:
+Every category below is also published as JSON. `GET /v1/models` is public (no API key) and takes an optional `type` query parameter:
 
 | `type` | Returns | Pricing published |
 | --- | --- | --- |
@@ -71,7 +71,7 @@ Every non-text row looks like this (Seedance 2.5 Spicy shown):
 }
 ```
 
-Image rows carry `aspectRatios`, `resolutions`, `qualities`, `minDimension` / `maxDimension` in `constraints`; Image Studio rows carry `combineImages` (multi-image input) and `async`. Prices are the amounts the API bills, the same figures `POST /v1/billing/estimate` returns. A row with `"pricing": {}` means no price is published for it — never assume `$0`. Unknown `type` values return `400`.
+Image rows carry `aspectRatios`, `resolutions`, `qualities`, `minDimension` / `maxDimension` in `constraints`; Image Studio rows carry `combineImages` (multi-image input) and `async`. Catalog prices can differ from [`POST /v1/billing/estimate`](/platform/billing#estimate-cost), which returns the amount held on your balance: for a model with a fallback chain that is the highest price in the chain. Use the estimate for the most a request can cost. A row with `"pricing": {}` means no price is published for it — never assume `$0`. Unknown `type` values return `400`.
 
 ## Image Generation
 

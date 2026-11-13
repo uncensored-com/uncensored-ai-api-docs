@@ -99,7 +99,7 @@
     {
       "source": "/changelog",
       "destination": "/introduction",
-      "permanent": true
+      "permanent": false
     }
   ]
 }
