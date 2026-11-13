@@ -1,15 +1,16 @@
 ---
 title: "Generate Image"
-description: "Generate images from text prompts."
+sidebarTitle: "Generate"
+description: "Generate uncensored images from text prompts with POST /v1/images/generations: request parameters, async jobs, polling, webhooks and 20+ image models."
 ---
 
-# Generate Image <Badge color="green" shape="pill">Live</Badge>
+<Badge color="green" shape="pill">Live</Badge>
 
 ```text
 POST /v1/images/generations
 ```
 
-Generate an image from a text prompt. The endpoint can return synchronously or queue work for async delivery when a `callback_url` is supplied.
+Generate an image from a text prompt. The endpoint is always async: it returns `202` with a `job_id`. Poll the `status_url` for the result, or supply a `callback_url` for webhook delivery.
 
 ## Request body
 
@@ -17,11 +18,11 @@ Generate an image from a text prompt. The endpoint can return synchronously or q
 | --- | --- | --- | --- |
 | `prompt` | string | Yes | Text prompt describing the image. 1-2,000 characters after trimming; cannot be empty. |
 | `model` | string | Yes | Image model to use. The API defaults to `model-dev` if omitted, but integrations should send this explicitly. See [Image Models](/images/models). |
-| `image_width` | integer | No | Width in pixels. Schema accepts 256-2,048. Some providers clamp or map dimensions internally. Default: `1024`. |
-| `image_height` | integer | No | Height in pixels. Schema accepts 256-2,048. Some providers clamp or map dimensions internally. Default: `1024`. |
+| `image_width` | integer | No | Width in pixels. Schema accepts 256-2,048. Some models clamp or map dimensions internally. Default: `1024`. |
+| `image_height` | integer | No | Height in pixels. Schema accepts 256-2,048. Some models clamp or map dimensions internally. Default: `1024`. |
 | `callback_url` | string | No | Webhook URL for async delivery. |
-| `resolution` | string | No | Top-level convenience param for variable-size models. Also passed to provider settings. |
-| `quality` | string | No | Top-level convenience param for quality-priced models. Also passed to provider settings. |
+| `resolution` | string | No | Top-level convenience param for variable-size models. Also passed to the model's settings. |
+| `quality` | string | No | Top-level convenience param for quality-priced models. Also passed to the model's settings. |
 | `additional_settings` | object | No | Model-specific settings such as `seed`, `aspect_ratio`, `negative_prompt`, `num_inference_steps`, `guidance_scale`, `output_format`, `enable_web_search`, and `enable_image_search`. |
 | `enable_fallback` | boolean | No | Defaults to `true`. Image generation models currently have no fallback configured. |
 
@@ -43,19 +44,7 @@ curl --request POST "https://api.uncensored.com/api/v1/images/generations" \
   }'
 ```
 
-## Sync response
-
-```json
-{
-  "job_id": "550e8400-e29b-41d4-a716-446655440000",
-  "status": "completed",
-  "url": "https://media.lesscensored.com/images/550e8400.jpg",
-  "generation_time": 2.5,
-  "model": "model-pro"
-}
-```
-
-## Async request
+## Request with webhook delivery
 
 ```json
 {
@@ -67,7 +56,9 @@ curl --request POST "https://api.uncensored.com/api/v1/images/generations" \
 }
 ```
 
-## Async response
+## Response
+
+Without a `callback_url`, `webhook_url` is `null`.
 
 ```json
 {
@@ -103,8 +94,7 @@ Poll every 2-5 seconds. Image generation typically takes 5-30 seconds.
 
 | Status code | Description |
 | --- | --- |
-| `200` | Image generated successfully in sync mode. |
-| `202` | Job accepted and queued for async mode. |
+| `202` | Job accepted and queued. |
 | `400` | Invalid request parameters. |
 | `402` | Insufficient funds. |
 | `403` | Content moderation failed, or scope does not permit this model. |

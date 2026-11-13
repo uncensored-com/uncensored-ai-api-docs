@@ -1,9 +1,7 @@
 ---
 title: "Authentication"
-description: "Authenticate API requests with an Uncensored AI API key."
+description: "Authenticate Uncensored AI API requests with an API key in the x-api-key header or as a Bearer token, plus required headers and idempotency keys."
 ---
-
-# Authentication
 
 All API requests require an API key.
 
@@ -17,7 +15,7 @@ API keys can be created and managed through the [Developer Dashboard](https://un
 
 | Header | Required | Description |
 | --- | --- | --- |
-| `x-api-key: <key>` | Yes | API key authentication. |
+| `x-api-key: <key>` | Yes | API key authentication. `Authorization: Bearer <key>` is also accepted. |
 | `Content-Type: application/json` | Yes, on JSON requests | Standard JSON request body. |
 | `Idempotency-Key: <string>` | No | Safely retry write requests without duplicate jobs or charges. |
 
