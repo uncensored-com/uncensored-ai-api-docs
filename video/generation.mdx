@@ -101,7 +101,9 @@ An unknown `job_id` returns `404`.
 
 ## Audio on supported models
 
-Audio-capable models (those that list `generate_audio` on [Video Models](/video/models), such as `seedance-2.0-spicy`) accept `generate_audio` inside `additional_settings`. It defaults to off; setting it to `true` adds an audio track and roughly doubles the per-second cost.
+Audio-capable models (those that list `generate_audio` on [Video Models](/video/models)) accept `generate_audio` inside `additional_settings`, and they price it in two different ways.
+
+On `seedance-2.0-spicy`, `seedance-2.0-fast-spicy` and `seedance-v1.5-pro-spicy` it defaults to off, and setting it to `true` adds an audio track and doubles the per-second cost. On every Seedance 2.5 model audio is on by default and included in the listed price, so sending `generate_audio` does not change what you are charged.
 
 ```bash
 curl --request POST "https://api.uncensored.com/api/v1/videos/generations" \
