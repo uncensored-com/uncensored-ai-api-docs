@@ -234,15 +234,21 @@ export const ModelCards = () => {
     .mc-card:last-child, .mc-card.mc-last-visible { border-bottom: none; }
     .mc-card:hover { background: var(--mc-row-hover); }
 
-    .mc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-    .mc-left { min-width: 0; }
+    /* The two halves share the row only while both fit. A model with a long
+       per-resolution price list pushes the meta onto its own line instead of
+       squeezing the name and ID into a sliver. */
+    .mc-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 16px; }
+    .mc-left { min-width: 0; flex: 1 1 260px; }
     .mc-title { font-size: 15px; font-weight: 600; color: var(--mc-fg); line-height: 1.3; }
-    .mc-idrow { display: inline-flex; align-items: center; gap: 7px; margin-top: 7px; }
+    .mc-idrow { display: flex; align-items: center; gap: 7px; margin-top: 7px; max-width: 100%; }
     .mc-id {
       font-size: 12.5px; font-weight: 500;
       padding: 2px 7px; border-radius: 6px;
       background: var(--mc-code-bg); color: var(--mc-fg);
-      word-break: break-all;
+      min-width: 0;
+      /* break-all split IDs one character per line once the column was starved;
+         anywhere only breaks when the word genuinely cannot fit. */
+      overflow-wrap: anywhere;
     }
     .mc-copy {
       display: inline-flex; align-items: center; justify-content: center;
@@ -261,7 +267,9 @@ export const ModelCards = () => {
       .mc-copy { opacity: .7; padding: 6px; margin: -4px; }
     }
 
-    .mc-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 14px; flex-shrink: 0; text-align: right; }
+    /* flex-shrink: 0 here used to let a long cost string overflow its own box
+       and spill leftwards across the title. */
+    .mc-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 14px; flex: 1 1 auto; min-width: 0; text-align: right; }
     .mc-meta code { background: transparent; padding: 0; font-size: 13px; color: var(--mc-fg); }
     .mc-status :is(span, .badge) { vertical-align: middle; }
     .mc-tag { font-size: 12px; color: var(--mc-muted); }
@@ -282,7 +290,10 @@ export const ModelCards = () => {
       .mc-count, .mc-empty { margin-left: 0; padding-left: 0; }
       .mc-search { font-size: 16px; } /* avoid iOS focus zoom */
 
-      .mc-head { flex-direction: column; gap: 0; }
+      /* Column direction makes flex-basis a height, so clear the row-level
+         basis rather than let it stretch these blocks. */
+      .mc-head { flex-direction: column; flex-wrap: nowrap; gap: 0; }
+      .mc-left, .mc-meta { flex: 0 0 auto; }
       .mc-idrow { margin-top: 8px; }
       /* Meta becomes a left-aligned inline group under the ID */
       .mc-meta { justify-content: flex-start; text-align: left; margin-top: 11px; gap: 6px 14px; }
