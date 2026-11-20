@@ -73,6 +73,9 @@ export const TextModelsCatalog = () => {
             reasoning: c.reasoning,
           };
         });
+        // Always newest first. `created` is a unix timestamp from the API;
+        // anything without one sorts to the end in catalog order.
+        merged.sort((a, b) => (b.created || 0) - (a.created || 0));
         setModels(merged);
         setStatus("ready");
       })
@@ -84,10 +87,11 @@ export const TextModelsCatalog = () => {
     };
   }, []);
 
-  // Price is per token (string); show per million tokens.
+  // Price is per token (string); show per million tokens. The API omits
+  // `pricing` for models with no published price, so treat 0 as "no price".
   const perMillion = (v) => {
     const n = Number(v);
-    if (!isFinite(n)) return null;
+    if (!isFinite(n) || n <= 0) return null;
     return "$" + (n * 1e6).toFixed(2);
   };
 
@@ -282,6 +286,8 @@ export const TextModelsCatalog = () => {
 
     .tmc-price { font-size: 13px; color: var(--tmc-muted); white-space: nowrap; text-align: right; flex-shrink: 0; }
     .tmc-price b { color: var(--tmc-fg); font-weight: 600; }
+    .tmc-price-cache { margin-top: 4px; font-size: 12px; opacity: 0.8; }
+    .tmc-price-none { font-style: italic; opacity: 0.8; }
     .tmc-msg { padding: 24px 4px; font-size: 14px; color: var(--tmc-muted); }
     @media (max-width: 560px) {
       .tmc-card { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -337,6 +343,8 @@ export const TextModelsCatalog = () => {
           {filtered.map((m) => {
             const input = m.pricing && perMillion(m.pricing.prompt);
             const output = m.pricing && perMillion(m.pricing.completion);
+            const cacheRead = m.pricing && perMillion(m.pricing.input_cache_read);
+            const cacheWrite = m.pricing && perMillion(m.pricing.input_cache_write);
             return (
               <div className="tmc-card" key={m.id}>
                 <div className="tmc-card-main">
@@ -376,21 +384,33 @@ export const TextModelsCatalog = () => {
                     )}
                   </div>
                 </div>
-                {(input || output) && (
-                  <div className="tmc-price">
-                    {input && (
-                      <span>
-                        <b>{input}</b>/M input
-                      </span>
-                    )}
-                    {input && output && " · "}
-                    {output && (
-                      <span>
-                        <b>{output}</b>/M output
-                      </span>
-                    )}
-                  </div>
-                )}
+                <div className="tmc-price">
+                  {(input || output) && (
+                    <div>
+                      {input && (
+                        <span>
+                          <b>{input}</b>/M input
+                        </span>
+                      )}
+                      {input && output && " · "}
+                      {output && (
+                        <span>
+                          <b>{output}</b>/M output
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  {(input || output) && (cacheRead || cacheWrite) && (
+                    <div className="tmc-price-cache">
+                      {cacheRead && <span>{cacheRead}/M cache read</span>}
+                      {cacheRead && cacheWrite && " · "}
+                      {cacheWrite && <span>{cacheWrite}/M cache write</span>}
+                    </div>
+                  )}
+                  {!input && !output && (
+                    <span className="tmc-price-none">Pricing not published</span>
+                  )}
+                </div>
               </div>
             );
           })}

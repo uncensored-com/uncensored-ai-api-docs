@@ -8,7 +8,9 @@ import { TextModelsCatalog } from '/snippets/text-models-catalog.jsx';
 
 <Badge color="green" shape="pill">Live</Badge>
 
-The full catalog of chat models, loaded live from the API. Use the `Model ID` exactly as shown when sending [chat completion](/chat/completions) requests. Pricing is per million tokens.
+The full catalog of chat models, loaded live from the API and listed newest first. Use the `Model ID` exactly as shown when sending [chat completion](/chat/completions) requests.
+
+Pricing is per million tokens. Input and output rates are shown on every model, and where a model supports prompt caching the cache read and cache write rates are shown underneath. A model that reads `Pricing not published` has no price in the catalog yet, so check it before you build against it: the rate is not zero.
 
 <TextModelsCatalog />
 

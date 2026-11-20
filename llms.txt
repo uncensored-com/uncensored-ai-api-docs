@@ -24,7 +24,8 @@
 ## Video
 
 - [Video](https://docs.uncensored.com/video/overview.md): Uncensored AI video API: text-to-video, image-to-video, video-to-video, video editing and extension with Seedance, Wan, Sora, Grok Imagine and more.
-- [Video Generation](https://docs.uncensored.com/video/generation.md): Generate videos from text, images or clips with POST /v1/videos/generations: 40+ live models, per-second pricing, job polling and webhook delivery.
+- [Video Generation](https://docs.uncensored.com/video/generation.md): Generate videos from text, images or clips with POST /v1/videos/generations: request parameters, async jobs, polling, webhooks and audio support.
+- [Video Models](https://docs.uncensored.com/video/models.md): Every live Uncensored AI video model: Seedance, Wan, HappyHorse, Grok Imagine and more, with required parameters, resolutions, per-second pricing and typical speed.
 
 ## Chat
 

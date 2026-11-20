@@ -51,7 +51,8 @@
             "group": "Video",
             "pages": [
               "video/overview",
-              "video/generation"
+              "video/generation",
+              "video/models"
             ]
           },
           {
