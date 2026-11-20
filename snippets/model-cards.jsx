@@ -73,14 +73,20 @@ export const ModelCards = () => {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
-          navigator.clipboard.writeText(id).then(() => {
-            btn.innerHTML = CHECK_ICON;
-            btn.classList.add("copied");
-            setTimeout(() => {
-              btn.innerHTML = COPY_ICON;
-              btn.classList.remove("copied");
-            }, 1200);
-          });
+          // navigator.clipboard is undefined outside a secure context, and the
+          // write can be rejected; without these guards the click throws.
+          if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+          navigator.clipboard
+            .writeText(id)
+            .then(() => {
+              btn.innerHTML = CHECK_ICON;
+              btn.classList.add("copied");
+              setTimeout(() => {
+                btn.innerHTML = COPY_ICON;
+                btn.classList.remove("copied");
+              }, 1200);
+            })
+            .catch(() => {});
         });
       }
       return card;
@@ -136,15 +142,24 @@ export const ModelCards = () => {
           input.type = "text";
           input.className = "mc-search";
           input.placeholder = "Search models…";
+          input.setAttribute("aria-label", "Search models");
           box.appendChild(input);
           input.addEventListener("input", () => {
             const q = input.value.trim().toLowerCase();
             let n = 0;
+            let last = null;
             list.querySelectorAll(".mc-card").forEach((c) => {
               const show = !q || c.dataset.search.indexOf(q) !== -1;
               c.style.display = show ? "" : "none";
-              if (show) n++;
+              c.classList.remove("mc-last-visible");
+              if (show) {
+                n++;
+                last = c;
+              }
             });
+            // :last-child still matches a card hidden by the filter, so mark the
+            // last visible one to keep a dangling divider off the bottom row.
+            if (last) last.classList.add("mc-last-visible");
             setCount(n);
             empty.style.display = n ? "none" : "";
           });
@@ -216,18 +231,24 @@ export const ModelCards = () => {
       border-radius: 8px;
       transition: background .12s ease;
     }
-    .mc-card:last-child { border-bottom: none; }
+    .mc-card:last-child, .mc-card.mc-last-visible { border-bottom: none; }
     .mc-card:hover { background: var(--mc-row-hover); }
 
-    .mc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-    .mc-left { min-width: 0; }
+    /* The two halves share the row only while both fit. A model with a long
+       per-resolution price list pushes the meta onto its own line instead of
+       squeezing the name and ID into a sliver. */
+    .mc-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 16px; }
+    .mc-left { min-width: 0; flex: 1 1 260px; }
     .mc-title { font-size: 15px; font-weight: 600; color: var(--mc-fg); line-height: 1.3; }
-    .mc-idrow { display: inline-flex; align-items: center; gap: 7px; margin-top: 7px; }
+    .mc-idrow { display: flex; align-items: center; gap: 7px; margin-top: 7px; max-width: 100%; }
     .mc-id {
       font-size: 12.5px; font-weight: 500;
       padding: 2px 7px; border-radius: 6px;
       background: var(--mc-code-bg); color: var(--mc-fg);
-      word-break: break-all;
+      min-width: 0;
+      /* break-all split IDs one character per line once the column was starved;
+         anywhere only breaks when the word genuinely cannot fit. */
+      overflow-wrap: anywhere;
     }
     .mc-copy {
       display: inline-flex; align-items: center; justify-content: center;
@@ -237,9 +258,18 @@ export const ModelCards = () => {
     }
     .mc-card:hover .mc-copy { opacity: .7; }
     .mc-copy:hover { opacity: 1; color: var(--mc-fg); }
+    .mc-copy:focus-visible { opacity: 1; color: var(--mc-fg); outline: 2px solid currentColor; outline-offset: 1px; }
     .mc-copy.copied { color: #16a34a; opacity: 1; }
 
-    .mc-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 14px; flex-shrink: 0; text-align: right; }
+    /* A device without hover never reveals the button, whatever its width, so
+       show it outright and give it a finger-sized target. */
+    @media (hover: none) {
+      .mc-copy { opacity: .7; padding: 6px; margin: -4px; }
+    }
+
+    /* flex-shrink: 0 here used to let a long cost string overflow its own box
+       and spill leftwards across the title. */
+    .mc-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 14px; flex: 1 1 auto; min-width: 0; text-align: right; }
     .mc-meta code { background: transparent; padding: 0; font-size: 13px; color: var(--mc-fg); }
     .mc-status :is(span, .badge) { vertical-align: middle; }
     .mc-tag { font-size: 12px; color: var(--mc-muted); }
@@ -260,11 +290,13 @@ export const ModelCards = () => {
       .mc-count, .mc-empty { margin-left: 0; padding-left: 0; }
       .mc-search { font-size: 16px; } /* avoid iOS focus zoom */
 
-      .mc-head { flex-direction: column; gap: 0; }
+      /* Column direction makes flex-basis a height, so clear the row-level
+         basis rather than let it stretch these blocks. */
+      .mc-head { flex-direction: column; flex-wrap: nowrap; gap: 0; }
+      .mc-left, .mc-meta { flex: 0 0 auto; }
       .mc-idrow { margin-top: 8px; }
       /* Meta becomes a left-aligned inline group under the ID */
       .mc-meta { justify-content: flex-start; text-align: left; margin-top: 11px; gap: 6px 14px; }
-      .mc-copy { opacity: .7; padding: 5px; margin: -3px; } /* larger tap target */
 
       /* Params stack label-over-value, full width */
       .mc-params { margin-top: 13px; gap: 11px; }

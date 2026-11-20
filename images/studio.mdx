@@ -33,24 +33,31 @@ Default model: `standard`. The API can default `model` when omitted, but product
 
 `common` means `callback_url`, `additional_settings`, and `enable_fallback`. Model-specific knobs are passed in `additional_settings`.
 
+Models are listed newest first. A `Not published` cost means the catalog returns no price for that model yet; call [`POST /v1/billing/estimate`](/platform/billing#estimate-cost) for the amount that will be held on your balance.
+
+For some models [`GET /v1/models?type=inpaint`](/models#listing-models-programmatically) returns a different identifier than the one below: `gemini-flash` for `standard`, `gemini-pro` for `pro`, `qwen-group` for `group-edit`, `grok-imagine` for `xai/grok-imagine-image/edit`, `wan` for `Wan-2.6`, and `seedream-v45-edit-seq` and `seedream-v5-lite-edit-seq` for the two sequential models. Both spellings are accepted in `model`.
+
 | Model ID | Display name | Required params | Optional supported params | Cost | ETA |
 | --- | --- | --- | --- | --- | --- |
-| `standard` | Gemini 2.5 Flash | `prompt`, `image_urls`, `model` | common; `image_urls` 1-5 | `$0.10` | ~8s |
-| `pro` | Gemini 3 Pro | `prompt`, `image_urls`, `model` | common; `image_urls` 1-5 | `$0.20` | ~10s |
-| `qwen-image/edit-2511` | Qwen Image Edit 2511 | `prompt`, `image_urls`, `model` | common; `image_urls` 1-3 | `$0.10` | ~15s |
-| `Seedream-4.5-uncensored` | Seedream v4.5 | `prompt`, `image_urls`, `model` | common + `seed`; `image_urls` 1-5 | `$0.10` | ~15s |
-| `Wan-2.6` | Wan 2.6 | `prompt`, `image_urls`, `model` | common + `seed`, `negative_prompt`; `image_urls` 1-5 | `$0.10` | ~20s |
-| `Wan-2.6-image-edit` | Wan 2.6 Image Edit | `prompt`, `image_urls`, `model` | common + `seed`, `negative_prompt`; `image_urls` 1-5 | `$0.10` | ~15s |
-| `group-edit` | Qwen Group Photo | `prompt`, `image_urls`, `model` | common + `seed`; `image_urls` 1-5 | `$0.10` | ~20s |
-| `xai/grok-imagine-image/edit` | Grok Imagine Edit | `prompt`, `image_urls`, `model` | common + `seed`; only the first image is used | `$0.10` | ~15s |
-| `seedream-v5` | Seedream v5 Lite | `prompt`, `image_urls`, `model` | common; `image_urls` 1-5 | `$0.10` | ~15s |
+| `seedream-v5.5/edit` | Seedream v5.5 Edit | `prompt`, `image_urls`, `model` | common; `image_urls` 1-5 | Not published | ~30s |
+| `h3-image-edit` | H3 Image Edit | `prompt`, `image_urls`, `model` | common; `image_urls` 1-5 | `$0.10` | ~20s |
+| `wan-2.7-image-edit-pro` | Wan 2.7 Image Edit Pro | `prompt`, `image_urls`, `model` | common + `seed`; `image_urls` 1-5 | `$0.10` | ~20s |
+| `wan-2.7-image-edit` | Wan 2.7 Image Edit | `prompt`, `image_urls`, `model` | common + `seed`; `image_urls` 1-5 | `$0.10` | ~15s |
 | `nano-banana-2/edit` | Nano Banana 2 Edit | `prompt`, `image_urls`, `model` | common + `resolution` (`0.5k`, `1k`, `2k`, `4k`), `aspect_ratio`, `output_format` (`png`, `jpeg`), `enable_web_search`, `enable_image_search`; `image_urls` 1-5 | `0.5k/1k/2k $0.10`, `4k $0.20` | ~20s |
 | `nano-banana-2/edit-fast` | Nano Banana 2 Edit Fast | `prompt`, `image_urls`, `model` | common + `resolution` (`2k`, `4k`), `aspect_ratio`, `output_format` (`png`, `jpeg`); `image_urls` 1-5 | `$0.10` | ~12s |
-| `seedream-v4.5/edit-sequential` | Seedream v4.5 Edit Sequential | `prompt`, `image_urls`, `model` | common + `seed`, `max_images` (1-15); `image_urls` 1-5 | `$0.10` | ~25s |
-| `seedream-v5.0-lite/edit-sequential` | Seedream v5 Lite Edit Sequential | `prompt`, `image_urls`, `model` | common + `max_images` (1-15); `image_urls` 1-5 | `$0.10` | ~25s |
-| `wan-2.7-image-edit` | Wan 2.7 Image Edit | `prompt`, `image_urls`, `model` | common + `seed`; `image_urls` 1-5 | `$0.10` | ~15s |
-| `wan-2.7-image-edit-pro` | Wan 2.7 Image Edit Pro | `prompt`, `image_urls`, `model` | common + `seed`; `image_urls` 1-5 | `$0.10` | ~20s |
 | `gpt-image-2/edit` | GPT Image 2 Edit | `prompt`, `image_urls`, `model` | common + `quality` (`low`, `medium`, `high`), `resolution` (`1k`, `2k`), `aspect_ratio`, `output_format` (`png`, `jpeg`, `webp`); `image_urls` 1-5 | `low/medium $0.10`, `high 1k $0.30`, `high 2k $0.40` | ~20s |
+| `seedream-v5.0-lite/edit-sequential` | Seedream v5 Lite Edit Sequential | `prompt`, `image_urls`, `model` | common + `max_images` (1-15); `image_urls` 1-5 | `$0.10` | ~25s |
+| `seedream-v5` | Seedream v5 Lite | `prompt`, `image_urls`, `model` | common; `image_urls` 1-5 | `$0.10` | ~15s |
+| `qwen-image/edit-2511` | Qwen Image Edit 2511 | `prompt`, `image_urls`, `model` | common; `image_urls` 1-3 | `$0.10` | ~15s |
+| `pro` | Gemini 3 Pro | `prompt`, `image_urls`, `model` | common; `image_urls` 1-5 | `$0.20` | ~10s |
+| `standard` | Gemini 2.5 Flash | `prompt`, `image_urls`, `model` | common; `image_urls` 1-5 | `$0.10` | ~8s |
+| `xai/grok-imagine-image/edit` | Grok Imagine Edit | `prompt`, `image_urls`, `model` | common + `seed`; only the first image is used | `$0.10` | ~15s |
+| `Wan-2.6-image-edit` | Wan 2.6 Image Edit | `prompt`, `image_urls`, `model` | common + `seed`, `negative_prompt`; `image_urls` 1-5 | `$0.10` | ~15s |
+| `Wan-2.6` | Wan 2.6 | `prompt`, `image_urls`, `model` | common + `seed`, `negative_prompt`; `image_urls` 1-5 | `$0.10` | ~20s |
+| `Seedream-4.5-uncensored` | Seedream v4.5 | `prompt`, `image_urls`, `model` | common + `seed`; `image_urls` 1-5 | `$0.10` | ~15s |
+| `seedream-v4.5/edit-sequential` | Seedream v4.5 Edit Sequential | `prompt`, `image_urls`, `model` | common + `seed`, `max_images` (1-15); `image_urls` 1-5 | `$0.10` | ~25s |
+| `group-edit` | Qwen Group Photo | `prompt`, `image_urls`, `model` | common + `seed`; `image_urls` 1-5 | `$0.10` | ~20s |
+| `qwen` | Qwen | `prompt`, `image_urls`, `model` | common; only the first image is used | `$0.10` | ~15s |
 
 ## Example request
 
