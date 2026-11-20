@@ -96,10 +96,17 @@ export const TextModelsCatalog = () => {
   };
 
   const copy = (id) => {
-    navigator.clipboard.writeText(id).then(() => {
-      setCopiedId(id);
-      setTimeout(() => setCopiedId((c) => (c === id ? null : c)), 1200);
-    });
+    // navigator.clipboard is undefined outside a secure context, and the write
+    // can be rejected; without these guards the click throws and the button
+    // silently does nothing.
+    if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+    navigator.clipboard
+      .writeText(id)
+      .then(() => {
+        setCopiedId(id);
+        setTimeout(() => setCopiedId((c) => (c === id ? null : c)), 1200);
+      })
+      .catch(() => {});
   };
 
   const providers = ["All", ...Array.from(new Set(models.map((m) => m.owned_by).filter(Boolean))).sort()];
@@ -197,6 +204,12 @@ export const TextModelsCatalog = () => {
       transition: all 0.12s ease;
     }
     .tmc-chip:hover { color: var(--tmc-fg); background: var(--tmc-chip-hover); border-color: var(--tmc-field-border-hover); }
+    .tmc-chip:focus-visible {
+      outline: none;
+      color: var(--tmc-fg);
+      border-color: var(--tmc-field-border-hover);
+      box-shadow: 0 0 0 3px var(--tmc-focus-ring);
+    }
     .tmc-chip.active {
       color: var(--tmc-active-fg);
       background: var(--tmc-active-bg);
@@ -289,9 +302,11 @@ export const TextModelsCatalog = () => {
     .tmc-price-cache { margin-top: 4px; font-size: 12px; opacity: 0.8; }
     .tmc-price-none { font-style: italic; opacity: 0.8; }
     .tmc-msg { padding: 24px 4px; font-size: 14px; color: var(--tmc-muted); }
-    @media (max-width: 560px) {
+    @media (max-width: 600px) {
       .tmc-card { flex-direction: column; align-items: flex-start; gap: 10px; }
       .tmc-price { text-align: left; }
+      /* 16px keeps iOS from zooming the page in when the field takes focus. */
+      .tmc-search { font-size: 16px; }
     }
   `;
 
@@ -307,6 +322,7 @@ export const TextModelsCatalog = () => {
         <input
           className="tmc-search"
           type="text"
+          aria-label="Search chat models"
           placeholder="Search models…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -339,7 +355,9 @@ export const TextModelsCatalog = () => {
 
       {status === "ready" && (
         <>
-          <div className="tmc-count">{filtered.length} models</div>
+          <div className="tmc-count" aria-live="polite">
+            {filtered.length} {filtered.length === 1 ? "model" : "models"}
+          </div>
           {filtered.map((m) => {
             const input = m.pricing && perMillion(m.pricing.prompt);
             const output = m.pricing && perMillion(m.pricing.completion);
