@@ -73,6 +73,9 @@ export const TextModelsCatalog = () => {
             reasoning: c.reasoning,
           };
         });
+        // Always newest first. `created` is a unix timestamp from the API;
+        // anything without one sorts to the end in catalog order.
+        merged.sort((a, b) => (b.created || 0) - (a.created || 0));
         setModels(merged);
         setStatus("ready");
       })
@@ -84,18 +87,26 @@ export const TextModelsCatalog = () => {
     };
   }, []);
 
-  // Price is per token (string); show per million tokens.
+  // Price is per token (string); show per million tokens. The API omits
+  // `pricing` for models with no published price, so treat 0 as "no price".
   const perMillion = (v) => {
     const n = Number(v);
-    if (!isFinite(n)) return null;
+    if (!isFinite(n) || n <= 0) return null;
     return "$" + (n * 1e6).toFixed(2);
   };
 
   const copy = (id) => {
-    navigator.clipboard.writeText(id).then(() => {
-      setCopiedId(id);
-      setTimeout(() => setCopiedId((c) => (c === id ? null : c)), 1200);
-    });
+    // navigator.clipboard is undefined outside a secure context, and the write
+    // can be rejected; without these guards the click throws and the button
+    // silently does nothing.
+    if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+    navigator.clipboard
+      .writeText(id)
+      .then(() => {
+        setCopiedId(id);
+        setTimeout(() => setCopiedId((c) => (c === id ? null : c)), 1200);
+      })
+      .catch(() => {});
   };
 
   const providers = ["All", ...Array.from(new Set(models.map((m) => m.owned_by).filter(Boolean))).sort()];
@@ -193,6 +204,12 @@ export const TextModelsCatalog = () => {
       transition: all 0.12s ease;
     }
     .tmc-chip:hover { color: var(--tmc-fg); background: var(--tmc-chip-hover); border-color: var(--tmc-field-border-hover); }
+    .tmc-chip:focus-visible {
+      outline: none;
+      color: var(--tmc-fg);
+      border-color: var(--tmc-field-border-hover);
+      box-shadow: 0 0 0 3px var(--tmc-focus-ring);
+    }
     .tmc-chip.active {
       color: var(--tmc-active-fg);
       background: var(--tmc-active-bg);
@@ -202,15 +219,18 @@ export const TextModelsCatalog = () => {
     .tmc-count { font-size: 13px; color: var(--tmc-muted); margin: 16px 2px 6px; }
     .tmc-card {
       display: flex;
+      flex-wrap: wrap;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 16px;
+      gap: 10px 16px;
       padding: 18px 4px;
       border-bottom: 1px solid var(--tmc-row-border);
     }
-    .tmc-card-main { min-width: 0; }
+    /* The price block carries two lines once cache rates are shown, so the
+       halves share a row only while both fit. */
+    .tmc-card-main { min-width: 0; flex: 1 1 260px; }
     .tmc-title { font-size: 15px; font-weight: 600; color: var(--tmc-fg); line-height: 1.3; }
-    .tmc-id { display: inline-flex; align-items: center; gap: 7px; margin-top: 7px; }
+    .tmc-id { display: flex; align-items: center; gap: 7px; margin-top: 7px; max-width: 100%; }
     .tmc-id code {
       font-size: 12.5px;
       font-weight: 500;
@@ -218,7 +238,10 @@ export const TextModelsCatalog = () => {
       border-radius: 6px;
       background: var(--tmc-code-bg);
       color: var(--tmc-fg);
-      word-break: break-all;
+      min-width: 0;
+      /* break-all splits an ID at every character once its column is starved;
+         anywhere breaks only when the word truly cannot fit. */
+      overflow-wrap: anywhere;
     }
     .tmc-copy {
       display: inline-flex;
@@ -280,12 +303,22 @@ export const TextModelsCatalog = () => {
     .tmc-cap:hover::after, .tmc-cap:hover::before,
     .tmc-cap:focus-visible::after, .tmc-cap:focus-visible::before { opacity: 1; visibility: visible; }
 
-    .tmc-price { font-size: 13px; color: var(--tmc-muted); white-space: nowrap; text-align: right; flex-shrink: 0; }
+    /* nowrap belongs on each price, not the block: a single rate must not break
+       mid-figure, but the block itself has to be allowed to wrap and shrink
+       rather than overflow across the model name. */
+    .tmc-price { font-size: 13px; color: var(--tmc-muted); text-align: right; flex: 1 1 auto; min-width: 0; }
+    .tmc-price span { white-space: nowrap; }
     .tmc-price b { color: var(--tmc-fg); font-weight: 600; }
+    .tmc-price-cache { margin-top: 4px; font-size: 12px; opacity: 0.8; }
+    .tmc-price-none { font-style: italic; opacity: 0.8; }
     .tmc-msg { padding: 24px 4px; font-size: 14px; color: var(--tmc-muted); }
-    @media (max-width: 560px) {
-      .tmc-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+    @media (max-width: 600px) {
+      /* Column direction makes flex-basis a height, so clear the row basis. */
+      .tmc-card { flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 10px; }
+      .tmc-card-main, .tmc-price { flex: 0 0 auto; }
       .tmc-price { text-align: left; }
+      /* 16px keeps iOS from zooming the page in when the field takes focus. */
+      .tmc-search { font-size: 16px; }
     }
   `;
 
@@ -301,6 +334,7 @@ export const TextModelsCatalog = () => {
         <input
           className="tmc-search"
           type="text"
+          aria-label="Search chat models"
           placeholder="Search models…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -333,10 +367,14 @@ export const TextModelsCatalog = () => {
 
       {status === "ready" && (
         <>
-          <div className="tmc-count">{filtered.length} models</div>
+          <div className="tmc-count" aria-live="polite">
+            {filtered.length} {filtered.length === 1 ? "model" : "models"}
+          </div>
           {filtered.map((m) => {
             const input = m.pricing && perMillion(m.pricing.prompt);
             const output = m.pricing && perMillion(m.pricing.completion);
+            const cacheRead = m.pricing && perMillion(m.pricing.input_cache_read);
+            const cacheWrite = m.pricing && perMillion(m.pricing.input_cache_write);
             return (
               <div className="tmc-card" key={m.id}>
                 <div className="tmc-card-main">
@@ -376,21 +414,33 @@ export const TextModelsCatalog = () => {
                     )}
                   </div>
                 </div>
-                {(input || output) && (
-                  <div className="tmc-price">
-                    {input && (
-                      <span>
-                        <b>{input}</b>/M input
-                      </span>
-                    )}
-                    {input && output && " · "}
-                    {output && (
-                      <span>
-                        <b>{output}</b>/M output
-                      </span>
-                    )}
-                  </div>
-                )}
+                <div className="tmc-price">
+                  {(input || output) && (
+                    <div>
+                      {input && (
+                        <span>
+                          <b>{input}</b>/M input
+                        </span>
+                      )}
+                      {input && output && " · "}
+                      {output && (
+                        <span>
+                          <b>{output}</b>/M output
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  {(input || output) && (cacheRead || cacheWrite) && (
+                    <div className="tmc-price-cache">
+                      {cacheRead && <span>{cacheRead}/M cache read</span>}
+                      {cacheRead && cacheWrite && " · "}
+                      {cacheWrite && <span>{cacheWrite}/M cache write</span>}
+                    </div>
+                  )}
+                  {!input && !output && (
+                    <span className="tmc-price-none">Pricing not published</span>
+                  )}
+                </div>
               </div>
             );
           })}
