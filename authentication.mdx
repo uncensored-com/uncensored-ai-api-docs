@@ -3,7 +3,21 @@ title: "Authentication"
 description: "Authenticate Uncensored AI API requests with an API key in the x-api-key header or as a Bearer token, plus required headers and idempotency keys."
 ---
 
-All API requests require an API key.
+Generation and account requests require an API key. Model discovery and cost estimates are public and do not require one:
+
+| Endpoint | API key required |
+| --- | --- |
+| `GET /v1/models` | No. [List models and prices](/models#listing-models-programmatically-get-v1-models-type). |
+| `GET /v1/catalog` | No. Model metadata and capabilities. |
+| `POST /v1/billing/estimate` | No. [Estimate a request's cost](/platform/billing#estimate-cost) without executing it. |
+
+For example, list chat models without an API key:
+
+```bash
+curl "https://api.uncensored.com/api/v1/models?type=text"
+```
+
+For endpoints that require authentication, send your key in either supported header:
 
 ```text
 x-api-key: YOUR_API_KEY
@@ -15,7 +29,7 @@ API keys can be created and managed through the [Developer Dashboard](https://un
 
 | Header | Required | Description |
 | --- | --- | --- |
-| `x-api-key: <key>` | Yes | API key authentication. `Authorization: Bearer <key>` is also accepted. |
+| `x-api-key: <key>` | On authenticated endpoints | API key authentication. `Authorization: Bearer <key>` is also accepted. |
 | `Content-Type: application/json` | Yes, on JSON requests | Standard JSON request body. |
 | `Idempotency-Key: <string>` | No | Safely retry write requests without duplicate jobs or charges. |
 
